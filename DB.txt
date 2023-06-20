@@ -29,3 +29,42 @@ title = '제목3',
 `body` = '내용3';
 
 SELECT * FROM article;
+
+
+CREATE TABLE `member`(
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    loginId VARCHAR(20) NOT NULL UNIQUE,
+    loginPw VARCHAR(100) NOT NULL,
+    `authLevel` TINYINT UNSIGNED NOT NULL DEFAULT 1 COMMENT '권한 레벨 (일반 = 1, 관리자 = 3)',
+    `name` VARCHAR(20) NOT NULL,
+    nickname VARCHAR(20) NOT NULL UNIQUE,
+    cellphoneNum VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    delStatus TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴여부 (탈퇴 전 = 0, 탈퇴 후 = 1)',
+    delDate DATETIME COMMENT '탈퇴 날짜'
+);
+
+INSERT INTO `member`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    loginId = 'admin',
+    loginPw = 'admin',
+    `name` = 'admin',
+    nickname = 'admin',
+    `authLevel` = 3,
+    cellphoneNum = '01042424242',
+    email = 'admin@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    loginId = 'test1',
+    loginPw = 'test1',
+    `name` = 'test1',
+    nickname = 'test1',
+    cellphoneNum = '01042424242',
+    email = 'test@gmail.com';
+
+SELECT * FROM `member`;
