@@ -26,13 +26,21 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
-	public Article doAdd(String title, String body) {
+	public ResultData doAdd(String title, String body) {
+		
+		if (Util.empty(title)) {
+			return ResultData.from("F-1", "제목을 입력해주세요.");
+		}
+		
+		if (Util.empty(body)) {
+			return ResultData.from("F-2", "내용을 입력해주세요.");
+		}
 		
 		articleService.writeArticle(title, body);
 		
 		int id = articleService.getLastInsertId();
 		
-		return articleService.getArticleById(id);
+		return ResultData.from("S-1", Util.f("%d번 게시글이 생성되었습니다.", id), articleService.getArticleById(id));
 	}
 	
 	@RequestMapping("/usr/article/getArticles")
