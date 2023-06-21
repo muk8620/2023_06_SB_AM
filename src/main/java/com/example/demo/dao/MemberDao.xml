@@ -24,10 +24,23 @@
 			where id = #{id}
 	</select>
 	
-	<select id="loginIdDupCheck" resultType="Member">
+	<select id="getMemberByLoginId" resultType="Member">
 		select *
 			from `member`
 			where loginId = #{loginId}
 	</select>
+	
+	<select id="getMemberByNickname" resultType="Member">
+		select *
+			from `member`
+			where nickname = #{nickname}
+	</select>
 
+	<select id="getMemberByNameAndEmail" resultType="Member">
+		select *
+			from `member`
+			where name = #{name}
+			and email = #{email} 
+	</select>
+	
 </mapper>

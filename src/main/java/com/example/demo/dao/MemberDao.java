@@ -13,6 +13,10 @@ public interface MemberDao {
 	
 	public int getLastInsertId();
 
-	public Member loginIdDupCheck(String loginId);
+	public Member getMemberByLoginId(String loginId);
+
+	public Member getMemberByNickname(String nickname);
+	
+	public Member getMemberByNameAndEmail(String name, String email);
 	
 }
