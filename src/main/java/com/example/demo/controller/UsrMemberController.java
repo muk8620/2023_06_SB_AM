@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.MemberService;
 import com.example.demo.util.Util;
-import com.example.demo.vo.Member;
 
 @Controller
 public class UsrMemberController {
@@ -43,7 +42,7 @@ public class UsrMemberController {
 			return "이메일을 입력해주세요.";
 		}
 		
-		if (memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email).equals("loginId")) {
+		if (memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email) == false) {
 			return "이미 사용중인 아이디입니다.";
 		}
 		

@@ -13,4 +13,6 @@ public interface MemberDao {
 	
 	public int getLastInsertId();
 
+	public Member loginIdDupCheck(String loginId);
+	
 }

@@ -16,10 +16,14 @@ public class MemberService {
 		this.memberDao = memberDao;
 	}
 
-	public String doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public boolean doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+		
+		if (this.loginIdDupCheck(loginId)) {
+			return false;
+		}
+		
 		memberDao.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
-		
-		
+		return true;
 	}
 
 	public Member getMemberById(int id) {
@@ -30,8 +34,11 @@ public class MemberService {
 		return memberDao.getLastInsertId();
 	}
 	
-	public String idDupCheck(String loginId) {
-		return memberDao.idDupCheck(loginId);
+	public boolean loginIdDupCheck(String loginId) {
+		if (memberDao.loginIdDupCheck(loginId) == null) {
+			return false;
+		}
+		return true;
 	}
 
 }
