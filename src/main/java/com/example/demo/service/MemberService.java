@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class MemberService {
 		this.memberDao = memberDao;
 	}
 
-	public ResultData doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 		
 		Member existsMember = getMemberByLoginId(loginId);
 		
@@ -42,7 +44,7 @@ public class MemberService {
 		return ResultData.from("S-1", Util.f("%s회원님이 가입되었습니다.", nickname), getMemberByNickname(nickname));
 	}
 
-	private Member getMemberByLoginId(String loginId) {
+	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
 	}
 
