@@ -28,9 +28,6 @@ updateDate = NOW(),
 title = '제목3',
 `body` = '내용3';
 
-SELECT * FROM article;
-
-
 CREATE TABLE `member`(
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
@@ -68,3 +65,4 @@ SET regDate = NOW(),
     email = 'test@gmail.com';
 
 SELECT * FROM `member`;
+SELECT * FROM article;
