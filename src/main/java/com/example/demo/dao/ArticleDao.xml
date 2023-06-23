@@ -9,6 +9,7 @@
 				, updateDate = now()
 				, title = #{title} 
 				, `body` = #{body} 
+				, memberId = #{loginedMemberId}
 	</insert>	
 	
 	<select id="getLastInsertId" resultType="int">

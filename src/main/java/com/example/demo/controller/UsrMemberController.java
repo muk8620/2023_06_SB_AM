@@ -55,6 +55,10 @@ public class UsrMemberController {
 	@ResponseBody
 	public ResultData doLogin(HttpSession session, String loginId, String loginPw) {
 		
+		if (session.getAttribute("loginedMemberId") != null) {
+			return ResultData.from("F-A", "로그아웃 후 이용해주세요.");
+		}
+		
 		if (Util.empty(loginId)) {
 			return ResultData.from("F-1", "아이디를 입력해주세요.");
 		}
@@ -79,12 +83,12 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
 	public ResultData doLogout(HttpSession session) {
-		if (session != null) {
-			return ResultData.from("F-1", "이미 로그아웃 되어있습니다.");
+		if (session.getAttribute("loginedMemberId") == null) {
+			return ResultData.from("F-A", "로그인 후 이용해주세요.");
 		}
 		
 		session.removeAttribute("loginedMemberId");
-		return ResultData.from("S-1", "로그아웃 되었습니다.");
+		return ResultData.from("S-1", "정상적으로 로그아웃 되었습니다.");
 	}
 
 }
