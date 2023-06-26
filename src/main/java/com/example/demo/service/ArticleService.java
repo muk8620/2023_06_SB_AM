@@ -12,37 +12,28 @@ import com.example.demo.vo.ResultData;
 
 @Service
 public class ArticleService {
+	
 	private ArticleDao articleDao;
 	
 	@Autowired
-	public ArticleService(ArticleDao articleDao) {
+	ArticleService(ArticleDao articleDao){
 		this.articleDao = articleDao;
 	}
 	
-//	서비스메서드
-	public void writeArticle(int loginedMemberId, String title, String body) {
-		articleDao.writeArticle(loginedMemberId, title, body);
+	// 서비스 메서드
+	public void writeArticle(int memberId, String title, String body) {
+		articleDao.writeArticle(memberId, title, body);
 	}
 	
 	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
 	}
-
-	public ResultData<Article> modifyArticle(int loginedMemberId, int id, String title, String body) {
-		
-		Article foundArticle = getArticleById(id);
-		
-		if (foundArticle == null) {
-			return ResultData.from("F-1", Util.f("%d번 게시글은 존재하지 않습니다.", id));
-		}
-		
-		if (loginedMemberId != foundArticle.getMemberId()) {
-			return ResultData.from("F-B", "해당 게시글에 대한 권한이 없습니다.");
-		}
+	
+	public ResultData<Article> modifyArticle(int id, String title, String body) {
 		
 		articleDao.modifyArticle(id, title, body);
 		
-		return ResultData.from("S-1", Util.f("%d번 게시글을 수정했습니다.", id), getArticleById(id));
+		return ResultData.from("S-1", Util.f("%d번 게시글을 수정했습니다", id), "article", getArticleById(id));
 	}
 	
 	public void deleteArticle(int id) {
@@ -56,4 +47,14 @@ public class ArticleService {
 	public int getLastInsertId() {
 		return articleDao.getLastInsertId();
 	}
+
+	public ResultData actorCanModify(int loginedMemberId, int memberId) {
+		
+		if(loginedMemberId != memberId) {
+			return ResultData.from("F-B", "해당 게시글에 대한 권한이 없습니다");
+		}
+		
+		return ResultData.from("S-1", "수정 가능");
+	}
+	
 }
