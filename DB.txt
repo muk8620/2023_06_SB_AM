@@ -62,12 +62,22 @@ email = 'admin@gmail.com';
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
-loginId = 'test',
-loginPw = 'test',
-`name` = 'test',
-nickname = 'test',
+loginId = 'test2',
+loginPw = 'test2',
+`name` = 'test2',
+nickname = 'test2',
 cellphoneNum = '01011112222',
-email = 'test@gmail.com';
+email = 'test2@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test3',
+loginPw = 'test3',
+`name` = 'test3',
+nickname = 'test3',
+cellphoneNum = '01011112222',
+email = 'test3@gmail.com';
 
 SELECT * FROM article;
 SELECT * FROM `member`;

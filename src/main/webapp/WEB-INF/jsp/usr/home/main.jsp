@@ -2,11 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="Main"/>
-<%@ include file= "../common/header.jsp" %>
+<c:set var="pageTitle" value="Main" />
+<%@ include file="../common/header.jsp" %>
+	
+	<section class="mt-8">
+		<div class="container mx-auto">
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat molestiae maiores fugiat nisi eos a inventore illum eaque eius aspernatur alias qui. Ut recusandae id ratione sit minima nihil saepe.
+			</div>
+			<div>
+				안녕하세요
+			</div>
+		</div>
+	</section>
 
-<div>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente molestias consectetur dignissimos dolorem mollitia facilis eius doloremque omnis inventore adipisci dicta dolor delectus asperiores laudantium quaerat in voluptas beatae vero.
-</div>
-
-<%@ include file= "../common/footer.jsp" %>
+<%@ include file="../common/footer.jsp" %>
