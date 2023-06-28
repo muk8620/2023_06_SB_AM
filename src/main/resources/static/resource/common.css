@@ -1,4 +1,3 @@
-@charset "UTF-8"; 
  
 @font-face {
     font-family: 'KCC-Ganpan';
@@ -18,7 +17,7 @@ html > body {
 
 .table-box-type-1 > table th, .table-box-type-1 > table td {
 	border:1px solid black;
-	padding: 10px;
+	padding: 10px; 
 	text-align: center;
 }
 
