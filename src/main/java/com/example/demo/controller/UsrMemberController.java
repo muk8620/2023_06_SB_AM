@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.MemberService;
 import com.example.demo.util.Util;
+import com.example.demo.vo.Article;
 import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
+import com.example.demo.vo.Rq;
 
 @Controller
 public class UsrMemberController {
@@ -51,33 +54,41 @@ public class UsrMemberController {
 		return doJoinRd;
 	}
 	
+	@RequestMapping("/usr/member/login")
+	public String login() {
+		return "usr/member/login";
+	}
+	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public ResultData doLogin(HttpSession session, String loginId, String loginPw) {
+	public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
 		
-		if (session.getAttribute("loginedMemberId") != null) {
-			return ResultData.from("F-A", "로그아웃 후 이용해주세요.");
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		if (rq.getLoginedMemberId() != 0) {
+			return Util.jsHistoryBack("로그아웃 후 이용해주세요.");
 		}
 		
 		if (Util.empty(loginId)) {
-			return ResultData.from("F-1", "아이디를 입력해주세요.");
+			return Util.jsHistoryBack("아이디를 입력해주세요.");
 		}
 		if (Util.empty(loginPw)) {
-			return ResultData.from("F-2", "비밀번호를 입력해주세요.");
+			return Util.jsHistoryBack("비밀번호를 입력해주세요.");
 		}
 		
-		Member existsMember = memberService.getMemberByLoginId(loginId);
+		Member member = memberService.getMemberByLoginId(loginId);
 		
-		if (existsMember == null) {
-			return ResultData.from("F-3", Util.f("존재하지 않는 아이디(%s)입니다.", loginId));
+		if (member == null) {
+			return Util.jsHistoryBack(Util.f("존재하지 않는 아이디(%s)입니다.", loginId));
 		}
 		
-		if (loginPw.equals(existsMember.getLoginPw()) == false) {
-			return ResultData.from("F-4", "비밀번호를 확인해주세요.");
+		if (loginPw.equals(member.getLoginPw()) == false) {
+			return Util.jsHistoryBack("비밀번호를 확인해주세요.");
 		}
 		
-		session.setAttribute("loginedMemberId", existsMember.getId());
-		return ResultData.from("S-1", Util.f("%s님 환영합니다.", existsMember.getNickname()));
+		rq.login(member);
+		
+		return Util.jsReplace(Util.f("%s님 환영합니다.", member.getNickname()), "/");
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
