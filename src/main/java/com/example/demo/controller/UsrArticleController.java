@@ -27,18 +27,31 @@ public class UsrArticleController {
 	}
 
 	// 액션 메서드
-	@RequestMapping("/usr/article/doAdd")
+	
+	@RequestMapping("/usr/article/write")
+	public String showWrite(HttpServletRequest req, Model model) {
+		
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		Article article = articleService.getForPrintArticle(id);
+		
+		model.addAttribute("article", article);
+		
+		return "usr/article/modify";
+	}
+	
+	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doAdd(HttpServletRequest req, String title, String body) {
+	public String doAdd(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 		
 		if (Util.empty(title)) {
-			return ResultData.from("F-1", "제목을 입력해주세요");
+			return rq.jsReturnOnView("제목을 입력해주세요");
 		}
 
 		if (Util.empty(body)) {
-			return ResultData.from("F-2", "내용을 입력해주세요");
+			return rq.jsReturnOnView("내용을 입력해주세요");	
 		}
 
 		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
@@ -66,34 +79,26 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(id);
 
 		model.addAttribute("article", article);
-		model.addAttribute("loginedMemberId", rq.getLoginedMemberId());
 		
 		return "usr/article/detail";
 	}
 	
-	@ResponseBody
-	public String checkModify(HttpServletRequest req, int id, String title, String body) {
+	@RequestMapping("/usr/article/modify")
+	public String showModify(HttpServletRequest req, Model model, int id) {
 		
 		Rq rq = (Rq) req.getAttribute("rq");
 		
-		Article article = articleService.getArticleById(id);
+		Article article = articleService.getForPrintArticle(id);
 		
 		if (article == null) {
-			return Util.jsHistoryBack(Util.f("%d번 게시글은 존재하지 않습니다", id));
+			return rq.jsReturnOnView(Util.f("%d번 게시글은 존재하지 않습니다", id));
 		}
-		
+
 		if (rq.getLoginedMemberId() != article.getMemberId()) {
-			return Util.jsHistoryBack("해당 게시글에 대한 권한이 없습니다");
+			return rq.jsReturnOnView("해당 게시글에 대한 권한이 없습니다");
 		}
 		
-		return modify(req, id, title, body);
-	}
-	
-	@RequestMapping("/usr/article/modify")
-	public String modify(HttpServletRequest req, int id, String title, String body) {
-		
-		req.setAttribute("title", title);
-		req.setAttribute("body", body);
+		model.addAttribute("article", article);
 		
 		return "usr/article/modify";
 	}

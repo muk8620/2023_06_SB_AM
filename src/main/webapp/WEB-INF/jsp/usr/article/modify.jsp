@@ -7,7 +7,8 @@
 
 	<section class="mt-8">
 		<div class="container mx-auto">
-			<form action="doModify" method="POST">
+			<form action="doModify" method="GET">
+				<input type="hidden" name="id" value="${article.id }"/>
 				<div class="table-box-type-1">
 					<table>
 						<colgroup>
@@ -15,22 +16,38 @@
 						</colgroup>
 						<tbody>
 							<tr>
+								<th>번호</th>
+								<td>${article.id }</td>
+							</tr>
+							<tr>
+								<th>작성일</th>
+								<td>${article.regDate }</td>
+							</tr>
+							<tr>
+								<th>수정일</th>
+								<td>${article.updateDate }</td>
+							</tr>
+							<tr>
 								<th>제목</th>
-								<td><input class="w-96" type="text" name="title" placeholder="제목을 입력해주세요." value="${title }" /></td>
+								<td><input class="w-96" type="text" name="title" placeholder="제목을 입력해주세요." value="${article.title }" /></td>
 							</tr>
 							<tr>
 								<th>내용</th>
-								<td><input class="w-96" type="text" name="body" placeholder="내용을 입력해주세요." value="${body }"/></td>
+								<td><textarea name="body">${article.body }</textarea></td>
 							</tr>
 							<tr>
-								<td colspan="2"><button>수정</button></td>
+								<th>작성자</th>
+								<td>${article.writer }</td>
+							</tr>
+							<tr>
+								<td colspan="2"><button class="btn btn-active btn-neutral">수정</button></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</form>
 			<div>
-				<button class="btn-text-link" onclick="history.back();">뒤로가기</button>
+				<button class="btn btn-active btn-neutral" onclick="history.back();">뒤로가기</button>
 			</div>
 		</div>
 	</section>
