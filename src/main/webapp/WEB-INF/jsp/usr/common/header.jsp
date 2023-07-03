@@ -23,7 +23,8 @@
 		<div class="flex-grow"></div>
 		<ul class="flex menu menu-horizontal bg-base-200">
 			<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/">HOME</a></li>
-			<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/article/list">LIST</a></li>
+			<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/article/list?boardId=1">NOTICE</a></li>
+			<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/article/list?boardId=2">FREE</a></li>
 			<c:if test="${rq.getLoginedMemberId() == 0}">
 				<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/member/login">LOGIN</a></li>
 			</c:if>

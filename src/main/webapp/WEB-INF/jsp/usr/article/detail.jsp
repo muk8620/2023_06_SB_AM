@@ -41,11 +41,11 @@
 				</table>
 			</div>
 			<div> 
-				<button class="btn btn-active btn-neutral" onclick="history.back();">뒤로가기</button>
+				<button class="btn btn-active btn-neutral" onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
 				
 				<c:if test="${loginedMemberId == article.memberId }">
 					<a class="btn btn-active btn-neutral" href="modify?id=${article.id}&title=${article.title}&body=${article.body}">수정</a>
-					<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
+					<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}&boardId=${article.boardId}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 				</c:if>
 			</div>
 		</div>

@@ -7,9 +7,10 @@
 		insert into article
 			set regDate = now()
 				, updateDate = now()
+				, memberId = #{loginedMemberId}
+				, boardId = #{boardId}
 				, title = #{title} 
 				, `body` = #{body} 
-				, memberId = #{loginedMemberId}
 	</insert>	
 	
 	<select id="getLastInsertId" resultType="int">
@@ -32,12 +33,16 @@
 	</select> 
     
 	<select id="getArticles" resultType="Article">
-		select a.*
-				, m.nickname as `writer`
-			from article as a
-			inner join `member` as m
-			on a.memberId = m.id
-			order by id DESC
+		SELECT a.*
+	        	, m.nickname AS `writer`
+	       		, b.name AS `boardName`
+	    	FROM article AS a
+	    	INNER JOIN `member` AS m
+		    ON a.memberId = m.id
+		    INNER JOIN board AS b
+		    ON a.boardId = b.id
+		    HAVING a.boardId = ${boardId } 
+		    ORDER BY id DESC
 	</select>
 	
 	<update id="modifyArticle" >

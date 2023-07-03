@@ -30,7 +30,7 @@
 				</table>
 				<c:if test="${rq.getLoginedMemberId() != 0}">
 					<div class="flex justify-end">
-						<a class="btn btn-active btn-neutral" href="write">글쓰기</a>
+						<a class="btn btn-active btn-neutral" href="write?boardId=${article.boardId }">글쓰기</a>
 					</div>
 				</c:if>	
 			</div>

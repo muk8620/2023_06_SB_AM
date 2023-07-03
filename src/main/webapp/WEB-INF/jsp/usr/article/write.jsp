@@ -8,6 +8,7 @@
 	<section class="mt-8">
 		<div class="container mx-auto">
 			<form action="doWrite" method="GET">
+				<input type="hidden" name="boardId" value="${boardId }"/>
 				<div class="table-box-type-1">
 					<table>
 						<colgroup>

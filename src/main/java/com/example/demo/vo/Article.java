@@ -14,5 +14,7 @@ public class Article {
 	private String title;
 	private String body;
 	private int memberId;
+	private int boardId;
 	private String writer;
+	private String boardName;
 }
