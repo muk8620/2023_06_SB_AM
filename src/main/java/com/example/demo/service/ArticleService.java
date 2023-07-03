@@ -30,7 +30,6 @@ public class ArticleService {
 	}
 	
 	public void modifyArticle(int id, String title, String body) {
-		
 		articleDao.modifyArticle(id, title, body);
 	}
 	
@@ -48,6 +47,10 @@ public class ArticleService {
 
 	public Article getForPrintArticle(int id) {
 		return articleDao.getForPrintArticle(id);
+	}
+
+	public int getArticlesCnt(int boardId) {
+		return articleDao.getArticlesCnt(boardId);
 	}
 	
 }

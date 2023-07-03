@@ -11,29 +11,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.BoardService;
 import com.example.demo.util.Util;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.Board;
 import com.example.demo.vo.Rq;
 
 @Controller
 public class UsrArticleController {
 
 	private ArticleService articleService;
+	private BoardService boardService;
 
 	@Autowired
-	public UsrArticleController(ArticleService articleService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService) {
 		this.articleService = articleService;
+		this.boardService = boardService;
 	}
 
 	// 액션 메서드
 	
 	@RequestMapping("/usr/article/write")
-	public String showWrite(Model model, int boardId) {
-		
-		int id = articleService.getLastInsertId();
-		
-		model.addAttribute("id", id);
-		model.addAttribute("boardId", boardId);
+	public String write() {
 		
 		return "usr/article/write";
 	}
@@ -56,15 +55,27 @@ public class UsrArticleController {
 
 		int id = articleService.getLastInsertId();
 
-		return Util.jsReplace(Util.f("%d번 게시글이 작성되었습니다", id), Util.f("list?boardId=%d", boardId));
+		return Util.jsReplace(Util.f("%d번 게시글이 작성되었습니다", id), Util.f("detail?id=%d", id));
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId) {
+	public String showList(HttpServletRequest req, Model model, int boardId) {
+		
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		Board board = boardService.getBoardById(boardId);
 
+		if (board == null) {
+			return rq.jsReturnOnView("존재하지 않는 게시판 입니다.");
+		}
+		
 		List<Article> articles = articleService.getArticles(boardId);
-
+		
+		int articlesCnt = articleService.getArticlesCnt(boardId);
+		
 		model.addAttribute("articles", articles);
+		model.addAttribute("board", board);
+		model.addAttribute("articlesCnt", articlesCnt);
 		
 		return "usr/article/list";
 	}
@@ -72,8 +83,6 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		Article article = articleService.getForPrintArticle(id);
 
 		model.addAttribute("article", article);

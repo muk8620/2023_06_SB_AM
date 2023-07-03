@@ -6,10 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.example.demo.util.Util;
 
 import lombok.Getter;
 
+@Component
+@Scope()
 public class Rq {
 	
 	@Getter

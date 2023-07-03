@@ -4,11 +4,11 @@
 
 <c:set var="pageTitle" value="Write" />
 <%@ include file="../common/header.jsp" %>
+
 	
 	<section class="mt-8">
 		<div class="container mx-auto">
 			<form action="doWrite" method="GET">
-				<input type="hidden" name="boardId" value="${boardId }"/>
 				<div class="table-box-type-1">
 					<table>
 						<colgroup>
@@ -16,8 +16,18 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>번호</th>
-								<td>${id + 1}</td>
+								<th>게시판</th>
+								<td>
+									<label>
+										<input type="radio" name="boardId" value="1"/>
+										&nbsp;공지사항
+									</label>
+									&nbsp;
+									<label>
+										<input type="radio" name="boardId" value="2" checked/>
+										&nbsp;자유
+									</label>
+								</td>
 							</tr>
 							<tr>
 								<th>제목</th>

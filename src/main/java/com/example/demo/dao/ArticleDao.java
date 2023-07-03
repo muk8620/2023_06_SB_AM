@@ -21,5 +21,7 @@ public interface ArticleDao {
 
 	public int getLastInsertId();
 
-	public Article getForPrintArticle(int id); 
+	public Article getForPrintArticle(int id);
+
+	public int getArticlesCnt(int boardId); 
 }

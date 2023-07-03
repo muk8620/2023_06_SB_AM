@@ -2,12 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="List" />
+<c:set var="pageTitle" value="${board.name} 게시판" />
 <%@ include file="../common/header.jsp" %>
 
 	<section class="mt-8">
 		<div class="container mx-auto">
 			<div class="table-box-type-1">
+				<h1 class="mb-2">총 게시판 글 수 : ${articlesCnt }개</h1>
 				<table>
 					<thead>
 						<tr>
@@ -29,8 +30,8 @@
 					</tbody>
 				</table>
 				<c:if test="${rq.getLoginedMemberId() != 0}">
-					<div class="flex justify-end">
-						<a class="btn btn-active btn-neutral" href="write?boardId=${article.boardId }">글쓰기</a>
+					<div class="mt-1 flex justify-end">
+						<a class="btn btn-active btn-neutral" href="write">글쓰기</a>
 					</div>
 				</c:if>	
 			</div>

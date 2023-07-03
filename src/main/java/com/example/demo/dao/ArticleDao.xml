@@ -35,13 +35,13 @@
 	<select id="getArticles" resultType="Article">
 		SELECT a.*
 	        	, m.nickname AS `writer`
-	       		, b.name AS `boardName`
 	    	FROM article AS a
 	    	INNER JOIN `member` AS m
 		    ON a.memberId = m.id
-		    INNER JOIN board AS b
-		    ON a.boardId = b.id
-		    HAVING a.boardId = ${boardId } 
+		    where 1 = 1
+		    <if test="boardId != 0">
+				and a.boardId = #{boardId } 
+			</if>
 		    ORDER BY id DESC
 	</select>
 	
@@ -63,5 +63,11 @@
 		delete from article
 			where id = #{id}
 	</delete>
+	
+	<select id="getArticlesCnt" resultType="int">
+		SELECT COUNT(id)
+			FROM article
+			WHERE boardId = #{boardId}
+	</select>
 	
 </mapper>
