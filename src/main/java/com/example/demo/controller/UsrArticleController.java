@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.service.ArticleService;
 import com.example.demo.util.Util;
 import com.example.demo.vo.Article;
-import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
 @Controller
@@ -29,36 +28,34 @@ public class UsrArticleController {
 	// 액션 메서드
 	
 	@RequestMapping("/usr/article/write")
-	public String showWrite(HttpServletRequest req, Model model) {
+	public String showWrite(Model model) {
 		
-		Rq rq = (Rq) req.getAttribute("rq");
+		int id = articleService.getLastInsertId();
 		
-		Article article = articleService.getForPrintArticle(id);
+		model.addAttribute("id", id);
 		
-		model.addAttribute("article", article);
-		
-		return "usr/article/modify";
+		return "usr/article/write";
 	}
 	
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doAdd(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 		
 		if (Util.empty(title)) {
-			return rq.jsReturnOnView("제목을 입력해주세요");
+			return Util.jsHistoryBack("제목을 입력해주세요");
 		}
 
 		if (Util.empty(body)) {
-			return rq.jsReturnOnView("내용을 입력해주세요");	
+			return Util.jsHistoryBack("내용을 입력해주세요");	
 		}
 
 		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 
 		int id = articleService.getLastInsertId();
 
-		return ResultData.from("S-1", Util.f("%d번 게시글이 생성되었습니다", id), "article", articleService.getArticleById(id));
+		return Util.jsReplace(Util.f("%d번 게시글이 작성되었습니다", id), "list");
 	}
 
 	@RequestMapping("/usr/article/list")
