@@ -43,6 +43,7 @@
 				and a.boardId = #{boardId } 
 			</if>
 		    ORDER BY id DESC
+		    LIMIT #{limitStart}, ${itemsInAPage}
 	</select>
 	
 	<update id="modifyArticle" >
