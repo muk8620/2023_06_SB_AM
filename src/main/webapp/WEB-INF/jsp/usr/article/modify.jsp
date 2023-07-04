@@ -10,14 +10,14 @@
 			<form action="doModify" method="GET">
 				<input type="hidden" name="id" value="${article.id }"/>
 				<div class="table-box-type-1">
-					<table>
+					<table class="table">
 						<colgroup>
 							<col width="200" />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th>번호</th>
-								<td>${article.id }</td>
+								<td><span class="badge badge-neutral">${article.id }</span></td>
 							</tr>
 							<tr>
 								<th>작성일</th>
@@ -29,11 +29,11 @@
 							</tr>
 							<tr>
 								<th>제목</th>
-								<td><input class="w-96" type="text" name="title" placeholder="제목을 입력해주세요." value="${article.title }" /></td>
+								<td><input class="input input-bordered input-accent w-full" type="text" name="title" placeholder="제목을 입력해주세요." value="${article.title }" /></td>
 							</tr>
 							<tr>
 								<th>내용</th>
-								<td><textarea name="body">${article.body }</textarea></td>
+								<td><textarea class="textarea textarea-accent w-full" name="body">${article.body }</textarea></td>
 							</tr>
 							<tr>
 								<th>작성자</th>
@@ -46,7 +46,7 @@
 					</table>
 				</div>
 			</form>
-			<div>
+			<div class="mt-2">
 				<button class="btn btn-active btn-neutral" onclick="history.back();">뒤로가기</button>
 			</div>
 		</div>

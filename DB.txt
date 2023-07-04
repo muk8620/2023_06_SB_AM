@@ -3,14 +3,15 @@ CREATE DATABASE SB_AM;
 USE SB_AM;
 
 CREATE TABLE article(
-    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT
-    , regDate DATETIME NOT NULL
-    , updateDate DATETIME NOT NULL
-    , memberId INT UNSIGNED NOT NULL
-    , boardId INT UNSIGNED NOT NULL
-    , title VARCHAR(100) NOT NULL
-    , `body` TEXT NOT NULL
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    `body` TEXT NOT NULL
 );
+
+ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
+ALTER TABLE article ADD COLUMN boardId INT UNSIGNED NOT NULL AFTER memberId;
 
 CREATE TABLE `member`(
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -28,17 +29,14 @@ CREATE TABLE `member`(
 );
 
 CREATE TABLE board(
-    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT
-    , `name` VARCHAR(30) NOT NULL UNIQUE
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    `code` VARCHAR(20) NOT NULL UNIQUE COMMENT 'notice(공지사항), free(자유), ...',
+    `name` VARCHAR(20) NOT NULL UNIQUE COMMENT '게시판 이름',
+    delStatus TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제여부 (삭제 전 = 0, 삭제 후 = 1)',
+    delDate DATETIME COMMENT '삭제 날짜'
 );
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-memberId = 1,
-boardId = 1,
-title = '공지글',
-`body` = '공지글';
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -59,16 +57,8 @@ title = '제목2',
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-memberId = 3,
-boardId = 2,
-title = '제목3',
-`body` = '내용3';
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-memberId = 3,
-boardId = 2,
+memberId = 1,
+boardId = 1,
 title = '제목4',
 `body` = '내용4';
 
@@ -86,42 +76,27 @@ email = 'admin@gmail.com';
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
-loginId = 'test1',
-loginPw = 'test1',
-`name` = 'test1',
-nickname = 'test1',
+loginId = 'test',
+loginPw = 'test',
+`name` = 'test',
+nickname = 'test',
 cellphoneNum = '01011112222',
-email = 'test1@gmail.com';
+email = 'test@gmail.com';
 
-INSERT INTO `member`
+INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-loginId = 'test2',
-loginPw = 'test2',
-`name` = 'test2',
-nickname = 'test2',
-cellphoneNum = '01011112222',
-email = 'test2@gmail.com';
+`code` = 'notice',
+`name` = '공지사항';
 
 INSERT INTO board
-    SET `name` = '공지사항';
-    
-INSERT INTO board
-    SET `name` = '자유게시판'; 
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'free',
+`name` = '자유';
 
 SELECT * FROM article;
 SELECT * FROM `member`;
 SELECT * FROM board;
 
 SELECT LAST_INSERT_ID();
-
-SELECT a.*
-        , m.nickname AS `writer`
-        , b.name AS `boardName`
-    FROM article AS a
-    INNER JOIN `member` AS m
-    ON a.memberId = m.id
-    INNER JOIN board AS b
-    ON a.boardId = b.id
-    HAVING a.boardId = 1
-    ORDER BY id DESC

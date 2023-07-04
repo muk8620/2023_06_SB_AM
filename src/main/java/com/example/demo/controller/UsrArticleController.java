@@ -2,8 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,66 +20,61 @@ public class UsrArticleController {
 
 	private ArticleService articleService;
 	private BoardService boardService;
+	private Rq rq;
 
 	@Autowired
-	public UsrArticleController(ArticleService articleService, BoardService boardService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService, Rq rq) {
 		this.articleService = articleService;
 		this.boardService = boardService;
+		this.rq = rq;
 	}
 
-	// 액션 메서드
-	
 	@RequestMapping("/usr/article/write")
 	public String write() {
-		
 		return "usr/article/write";
 	}
 	
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, int boardId, String title, String body) {
+	public String doWrite(int boardId, String title, String body) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		if (Util.empty(title)) {
 			return Util.jsHistoryBack("제목을 입력해주세요");
 		}
 
 		if (Util.empty(body)) {
-			return Util.jsHistoryBack("내용을 입력해주세요");	
+			return Util.jsHistoryBack("내용을 입력해주세요");
 		}
 
 		articleService.writeArticle(rq.getLoginedMemberId(), boardId, title, body);
 
 		int id = articleService.getLastInsertId();
 
-		return Util.jsReplace(Util.f("%d번 게시글이 작성되었습니다", id), Util.f("detail?id=%d", id));
+		return Util.jsReplace(Util.f("%d번 게시글이 생성되었습니다", id), Util.f("detail?id=%d", id));
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req, Model model, int boardId) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		Board board = boardService.getBoardById(boardId);
+	public String showList(Model model, int boardId) {
 
-		if (board == null) {
-			return rq.jsReturnOnView("존재하지 않는 게시판 입니다.");
-		}
+		Board board = boardService.getBoardById(boardId);
 		
-		List<Article> articles = articleService.getArticles(boardId);
+		if (board == null) {
+			return rq.jsReturnOnView("존재하지 않는 게시판입니다");
+		}
 		
 		int articlesCnt = articleService.getArticlesCnt(boardId);
 		
+		List<Article> articles = articleService.getArticles(boardId);
+
 		model.addAttribute("articles", articles);
-		model.addAttribute("board", board);
 		model.addAttribute("articlesCnt", articlesCnt);
+		model.addAttribute("board", board);
 		
 		return "usr/article/list";
 	}
 
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpServletRequest req, Model model, int id) {
+	public String showDetail(Model model, int id) {
 
 		Article article = articleService.getForPrintArticle(id);
 
@@ -91,9 +84,7 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/modify")
-	public String showModify(HttpServletRequest req, Model model, int id) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String showModify(Model model, int id) {
 		
 		Article article = articleService.getForPrintArticle(id);
 		
@@ -112,10 +103,8 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, int id, String title, String body) {
+	public String doModify(int id, String title, String body) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
@@ -133,10 +122,8 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(HttpServletRequest req, int id, int boardId) {
+	public String doDelete(int id) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
@@ -149,6 +136,6 @@ public class UsrArticleController {
 
 		articleService.deleteArticle(id);
 
-		return Util.jsReplace(Util.f("%d번 게시글을 삭제했습니다", id), Util.f("list?boardId=%d", boardId));
+		return Util.jsReplace(Util.f("%d번 게시글을 삭제했습니다", id), "list");
 	}
 }

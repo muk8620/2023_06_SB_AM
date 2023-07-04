@@ -7,9 +7,11 @@
 
 	<section class="mt-8">
 		<div class="container mx-auto">
+			<div class="mb-2">
+				<span>총 : ${articlesCnt }개</span>
+			</div>
 			<div class="table-box-type-1">
-				<h1 class="mb-2">총 게시판 글 수 : ${articlesCnt }개</h1>
-				<table>
+				<table class="table">
 					<thead>
 						<tr>
 							<th>번호</th>

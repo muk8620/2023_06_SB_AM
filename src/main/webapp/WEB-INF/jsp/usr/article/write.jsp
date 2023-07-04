@@ -10,7 +10,7 @@
 		<div class="container mx-auto">
 			<form action="doWrite" method="GET">
 				<div class="table-box-type-1">
-					<table>
+					<table class="table">
 						<colgroup>
 							<col width="200" />
 						</colgroup>
@@ -31,11 +31,11 @@
 							</tr>
 							<tr>
 								<th>제목</th>
-								<td><input class="w-96" type="text" name="title" placeholder="제목을 입력해주세요." /></td>
+								<td><input class="input input-bordered input-accent w-full" type="text" name="title" placeholder="제목을 입력해주세요." /></td>
 							</tr>
 							<tr>
 								<th>내용</th>
-								<td><textarea name="body" placeholder="내용을 입력해주세요."></textarea></td>
+								<td><textarea class="textarea textarea-accent w-full" name="body" placeholder="내용을 입력해주세요."></textarea></td>
 							</tr>
 							<tr>
 								<td colspan="2"><button class="btn btn-active btn-neutral" >글쓰기</button></td>

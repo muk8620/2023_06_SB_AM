@@ -8,14 +8,14 @@
 	<section class="mt-8">
 		<div class="container mx-auto">
 			<div class="table-box-type-1">
-				<table>
+				<table class="table">
 					<colgroup>
 						<col width="200" />
 					</colgroup>
 					<tbody>
 						<tr>
 							<th>번호</th>
-							<td>${article.id }</td>
+							<td><span class="badge badge-neutral">${article.id }</span></td>
 						</tr>
 						<tr>
 							<th>작성일</th>
@@ -44,8 +44,8 @@
 				<button class="btn btn-active btn-neutral" onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
 				
 				<c:if test="${loginedMemberId == article.memberId }">
-					<a class="btn btn-active btn-neutral" href="modify?id=${article.id}&title=${article.title}&body=${article.body}">수정</a>
-					<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}&boardId=${article.boardId}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
+					<a class="btn btn-active btn-neutral" href="modify?id=${article.id}">수정</a>
+					<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 				</c:if>
 			</div>
 		</div>

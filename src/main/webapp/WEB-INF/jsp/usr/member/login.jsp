@@ -16,11 +16,11 @@
 							<tbody>
 								<tr>
 									<th>아이디</th>
-									<td> <input name="loginId" placeholder="아이디를 입력해주세요" /> </td>
+									<td> <input class="input input-bordered input-accent w-96" name="loginId" placeholder="아이디를 입력해주세요" /> </td>
 								</tr>
 								<tr>
 									<th>비밀번호</th>
-									<td><input name="loginPw" placeholder="비밀번호를 입력해주세요" /></td>
+									<td><input class="input input-bordered input-accent w-96" name="loginPw" placeholder="비밀번호를 입력해주세요" /></td>
 								</tr>
 								<tr>
 									<th colspan="2"><button class="btn btn-active btn-neutral">로그인</button></th>
@@ -29,7 +29,7 @@
 						</table>
 				</div>
 			</form>
-			<div>
+			<div class="mt-2">
 				<button class="btn btn-active btn-neutral" onclick="history.back();">뒤로가기</button>
 			</div>			
 		</div>
