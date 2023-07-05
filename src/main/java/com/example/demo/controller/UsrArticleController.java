@@ -55,7 +55,7 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page, ) {
+	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page, String searchType, String searchWord) {
 		
 		Board board = boardService.getBoardById(boardId);
 		
@@ -73,7 +73,7 @@ public class UsrArticleController {
 		
 		int pagesCnt = (int) Math.ceil((double) articlesCnt / itemsInAPage);
 		
-		List<Article> articles = articleService.getArticles(boardId, itemsInAPage, page);
+		List<Article> articles = articleService.getArticles(boardId, itemsInAPage, page, searchType, searchWord);
 		
 		model.addAttribute("articles", articles);
 		model.addAttribute("articlesCnt", articlesCnt);

@@ -5,17 +5,28 @@
 <c:set var="pageTitle" value="${board.name} 게시판" />
 <%@ include file="../common/header.jsp" %>
 	
+	<script>
+		function isEmpty(searchWord) {
+			if (!searchWord) {
+				alert('검색어를 입력해주세요.');
+				return history.back();
+			}
+		}
+	</script>
+	
 	<section class="mt-8">
 		<div class="container mx-auto">
-			<div class="flex mb-2">
-				<span>총 : ${articlesCnt }개</span>
+			<div class="flex justify-between items-end mb-2">
+				<span >총 : ${articlesCnt }개</span>
 				<form>
-					<select name="" id="">
+					<input type="hidden" name="boardId" value="${board.id }"/>
+					<select class="select select-bordered max-w-xs" name="searchType" >
 						<option value="title">제목</option>
 						<option value="body">내용</option>
 						<option value="writer">작성자</option>
 					</select>
-					
+					<input name="searchWord" class="input input-bordered max-w-xs" type="text" placeholder="검색어를 입력해주세요."/>
+					<button class="btn btn-outline max-w-xs" onclick="isEmpty(searchWord)">검색</button>
 				</form>
 			</div>
 			<div class="table-box-type-1">

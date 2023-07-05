@@ -37,11 +37,11 @@ public class ArticleService {
 		articleDao.deleteArticle(id);
 	}
 
-	public List<Article> getArticles(int boardId, int itemsInAPage, int page) {
+	public List<Article> getArticles(int boardId, int itemsInAPage, int page, String searchType, String searchWord) {
 		
 		int limitStart = (page - 1) * itemsInAPage;
 		
-		return articleDao.getArticles(boardId, limitStart, itemsInAPage);
+		return articleDao.getArticles(boardId, limitStart, itemsInAPage, searchType, searchWord);
 	}
 
 	public int getLastInsertId() {

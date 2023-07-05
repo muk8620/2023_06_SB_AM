@@ -40,7 +40,10 @@
 		    ON a.memberId = m.id
 		    where 1 = 1
 		    <if test="boardId != 0">
-				and a.boardId = #{boardId } 
+				AND a.boardId = #{boardId } 
+			</if>
+		    <if test="searchType != null and searchWord != null">
+		    	AND a.title like CONCAT('%', #{searchWord }, '%')
 			</if>
 		    ORDER BY id DESC
 		    LIMIT #{limitStart}, ${itemsInAPage}
