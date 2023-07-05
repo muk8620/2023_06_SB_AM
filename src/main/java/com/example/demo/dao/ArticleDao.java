@@ -17,11 +17,11 @@ public interface ArticleDao {
 
 	public void deleteArticle(int id); 
 	
-	public List<Article> getArticles(int boardId, int limitStart, int itemsInAPage, String searchType, String searchWord);
+	public List<Article> getArticles(int boardId, int limitStart, int itemsInAPage, String searchKeywordType, String searchKeyword);
 
 	public int getLastInsertId();
 
 	public Article getForPrintArticle(int id);
 
-	public int getArticlesCnt(int boardId); 
+	public int getArticlesCnt(int boardId, String searchKeyword, String searchKeywordType); 
 }

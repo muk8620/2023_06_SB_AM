@@ -38,12 +38,22 @@
 	    	FROM article AS a
 	    	INNER JOIN `member` AS m
 		    ON a.memberId = m.id
-		    where 1 = 1
-		    <if test="boardId != 0">
-				AND a.boardId = #{boardId } 
-			</if>
-		    <if test="searchType != null and searchWord != null">
-		    	AND a.title like CONCAT('%', #{searchWord }, '%')
+		    where a.boardId = #{boardId } 
+		    <if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKeywordType == 'body'">
+						AND a.title like CONCAT('%', #{searchKeyword }, '%')
+					</when>
+					<when test="searchKeywordType == 'body'">
+						AND a.body like CONCAT('%', #{searchKeyword }, '%')
+					</when>
+					<otherwise>
+						AND (
+						 	a.title like CONCAT('%', #{searchKeyword }, '%')
+							OR a.body like CONCAT('%', #{searchKeyword }, '%')
+						)
+					</otherwise>
+				</choose>
 			</if>
 		    ORDER BY id DESC
 		    LIMIT #{limitStart}, ${itemsInAPage}
@@ -72,6 +82,22 @@
 		SELECT COUNT(id)
 			FROM article
 			WHERE boardId = #{boardId}
+		    <if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKeywordType == 'body'">
+						AND title like CONCAT('%', #{searchKeyword }, '%')
+					</when>
+					<when test="searchKeywordType == 'body'">
+						AND body like CONCAT('%', #{searchKeyword }, '%')
+					</when>
+					<otherwise>
+						AND (
+						 	title like CONCAT('%', #{searchKeyword }, '%')
+							OR body like CONCAT('%', #{searchKeyword }, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
 	</select>
 	
 </mapper>

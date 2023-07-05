@@ -34,7 +34,7 @@ public class UsrArticleController {
 	public String write() {
 		return "usr/article/write";
 	}
-	
+
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public String doWrite(int boardId, String title, String body) {
@@ -55,32 +55,38 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page, String searchType, String searchWord) {
-		
+	public String showList(Model model, 
+			@RequestParam(defaultValue = "1") int boardId,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "") String searchKeyword,
+			@RequestParam(defaultValue = "title") String searchKeywordType) {
+
 		Board board = boardService.getBoardById(boardId);
-		
+
 		if (board == null) {
 			return rq.jsReturnOnView("존재하지 않는 게시판입니다");
 		}
-		
+
 		if (page <= 0) {
 			return rq.jsReturnOnView("페이지 번호가 올바르지 않습니다.");
 		}
-		
-		int articlesCnt = articleService.getArticlesCnt(boardId);
-		
+
+		int articlesCnt = articleService.getArticlesCnt(boardId, searchKeyword, searchKeywordType);
+
 		int itemsInAPage = 10;
-		
+
 		int pagesCnt = (int) Math.ceil((double) articlesCnt / itemsInAPage);
-		
-		List<Article> articles = articleService.getArticles(boardId, itemsInAPage, page, searchType, searchWord);
-		
+
+		List<Article> articles = articleService.getArticles(boardId, searchKeyword, searchKeywordType, itemsInAPage, page);
+
 		model.addAttribute("articles", articles);
 		model.addAttribute("articlesCnt", articlesCnt);
 		model.addAttribute("board", board);
 		model.addAttribute("pagesCnt", pagesCnt);
 		model.addAttribute("page", page);
-		
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("searchKeywordType", searchKeywordType);
+
 		return "usr/article/list";
 	}
 
@@ -90,15 +96,15 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(id);
 
 		model.addAttribute("article", article);
-		
+
 		return "usr/article/detail";
 	}
-	
+
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int id) {
-		
+
 		Article article = articleService.getForPrintArticle(id);
-		
+
 		if (article == null) {
 			return rq.jsReturnOnView(Util.f("%d번 게시글은 존재하지 않습니다", id));
 		}
@@ -106,9 +112,9 @@ public class UsrArticleController {
 		if (rq.getLoginedMemberId() != article.getMemberId()) {
 			return rq.jsReturnOnView("해당 게시글에 대한 권한이 없습니다");
 		}
-		
+
 		model.addAttribute("article", article);
-		
+
 		return "usr/article/modify";
 	}
 
@@ -125,9 +131,9 @@ public class UsrArticleController {
 		if (rq.getLoginedMemberId() != article.getMemberId()) {
 			return Util.jsHistoryBack("해당 게시글에 대한 권한이 없습니다");
 		}
-		
+
 		articleService.modifyArticle(id, title, body);
-		
+
 		return Util.jsReplace(Util.f("%d번 게시글을 수정했습니다", id), Util.f("detail?id=%d", id));
 	}
 

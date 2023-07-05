@@ -6,28 +6,37 @@
 <%@ include file="../common/header.jsp" %>
 	
 	<script>
-		function isEmpty(searchWord) {
-			if (!searchWord) {
+		function isEmpty(form) {
+			
+			form.searchKeyword.value = form.searchKeyword.value.trim();
+			
+			if (!form.searchKeyword.value) {
 				alert('검색어를 입력해주세요.');
-				return history.back();
+				return;
 			}
+			
+			form.submit();
 		}
 	</script>
 	
 	<section class="mt-8">
 		<div class="container mx-auto">
-			<div class="flex justify-between items-end mb-2">
-				<span >총 : ${articlesCnt }개</span>
-				<form>
-					<input type="hidden" name="boardId" value="${board.id }"/>
-					<select class="select select-bordered max-w-xs" name="searchType" >
-						<option value="title">제목</option>
-						<option value="body">내용</option>
-						<option value="writer">작성자</option>
-					</select>
-					<input name="searchWord" class="input input-bordered max-w-xs" type="text" placeholder="검색어를 입력해주세요."/>
-					<button class="btn btn-outline max-w-xs" onclick="isEmpty(searchWord)">검색</button>
-				</form>
+			<div class="flex justify-between mb-2">
+				<div class="self-center">
+					<span>총 : ${articlesCnt }개</span>
+				</div>
+				<div>
+					<form onsubmit="isEmpty(this); return false;">
+						<input type="hidden" name="boardId" value="${board.id }"/>
+						<select data-value="${searchKeywordType }" class="mr-2 select select-accent select-sm w-28" name="searchKeywordType" >
+							<option value="title">제목</option>
+							<option value="body">내용</option>
+							<option value="title,body">제목 + 내용</option>
+						</select>
+						<input id="searchKeyword" name="searchKeyword" class="mr-2 input input-bordered input-sm input-accent w-64" type="text" placeholder="검색어를 입력해주세요." value="${searchKeyword }"/>
+						<button class="btn btn-outline btn-sm">검색</button>
+					</form>
+				</div>
 			</div>
 			<div class="table-box-type-1">
 				<table class="table">
@@ -62,24 +71,27 @@
 					<c:set var="pageMenuLen" value="5" />
 					<c:set var="startPage" value="${page - pageMenuLen >= 1 ? page - pageMenuLen : 1 }" />
 					<c:set var="endPage" value="${page + pageMenuLen <= pagesCnt ? page + pageMenuLen : pagesCnt }" />
+					
+					<c:set var="pageBaseUri" value="?boardId=${board.id }&searchKeywordType=${searchKeywordType }&searchKeyword=${searchKeyword }" />
+					
 					<c:if test="${page == 1 }">
 						<a class="join-item btn btn-disabled" >«</a>
 						<a class="join-item btn btn-disabled" >&lt;</a>
 					</c:if>
 					<c:if test="${page > 1 }">
-						<a class="join-item btn" href="?boardId=${board.id }&page=1">«</a>
-						<a class="join-item btn" href="?boardId=${board.id }&page=${page - 1}">&lt;</a>
+						<a class="join-item btn" href="${pageBaseUri }&page=1">«</a>
+						<a class="join-item btn" href="${pageBaseUri }&page=${page - 1}">&lt;</a>
 					</c:if>
 					<c:forEach begin="${startPage }" end="${endPage }" var="i">
-						<a class="join-item btn ${page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i }">${i }</a>
+						<a class="join-item btn ${page == i ? 'btn-active' : '' }" href="${pageBaseUri }&page=${i }">${i }</a>
 					</c:forEach>
 					<c:if test="${page == pagesCnt }">
 						<a class="join-item btn btn-disabled" >&gt;</a>
 						<a class="join-item btn btn-disabled" >»</a>
 					</c:if>
 					<c:if test="${page < pagesCnt }">
-						<a class="join-item btn" href="?boardId=${board.id }&page=${page + 1}">&gt;</a>
-						<a class="join-item btn" href="?boardId=${board.id }&page=${pagesCnt }">»</a>
+						<a class="join-item btn" href="${pageBaseUri }&page=${page + 1}">&gt;</a>
+						<a class="join-item btn" href="${pageBaseUri }&page=${pagesCnt }">»</a>
 					</c:if>
 				</div>
 			</div>
