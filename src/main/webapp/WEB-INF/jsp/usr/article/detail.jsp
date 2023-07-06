@@ -6,6 +6,26 @@
 <c:set var="pageTitle" value="Detail"/>
 <%@ include file= "../common/header.jsp" %>
 
+<script>
+	function ArticleDetail_increaseHitCnt() {
+		$.get('doIncreaseHitCnt', {
+			id : ${article.id}
+		}, function(data){
+			$('#articleDetail_increaseHitCnt').empty().html(data.data1);
+		}, 'json')
+		
+	}
+	
+	$(function(){
+		// 실전코드
+// 		ArticleDetail_increaseHitCnt();
+		
+		// 테스트코드
+		setTimeout(ArticleDetail_increaseHitCnt, 2000);
+	})
+	
+</script>
+
 	<section class="mt-8">
 		<div class="container mx-auto">
 			<div class="table-box-type-1">
@@ -17,6 +37,10 @@
 						<tr>
 							<th>번호</th>
 							<td><span class="badge badge-neutral">${article.id }</span></td>
+						</tr>
+						<tr>
+							<th>조회수</th>
+							<td><span id="articleDetail_increaseHitCnt">${article.hitCnt }</span></td>
 						</tr>
 						<tr>
 							<th>작성일</th>

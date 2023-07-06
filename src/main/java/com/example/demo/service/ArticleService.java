@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.ArticleDao;
-import com.example.demo.util.Util;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.ResultData;
 
@@ -54,6 +53,20 @@ public class ArticleService {
 
 	public int getArticlesCnt(int boardId, String searchKeyword, String searchKeywordType) {
 		return articleDao.getArticlesCnt(boardId, searchKeyword, searchKeywordType);
+	}
+
+	public ResultData increaseHitCnt(int id) {
+		int affectedRowsCnt = articleDao.increaseHitCnt(id);
+		
+		if (affectedRowsCnt == 0) {
+			return ResultData.from("F-1", "해당 게시물은 존재하지 않습니다.");
+		}
+		
+		return ResultData.from("S-1", "조회수 증가");
+	}
+
+	public int getArticleHitCnt(int id) {
+		return articleDao.getArticleHitCnt(id);
 	}
 	
 }

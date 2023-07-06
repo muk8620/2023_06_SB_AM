@@ -23,6 +23,12 @@
 			where id = #{id}
 	</select> 
 	
+	<update id="increaseHitCnt">
+		UPDATE article
+		    SET hitCnt = hitCnt + 1
+		    WHERE id = #{id }
+	</update>	
+	
 	<select id="getForPrintArticle" resultType="Article">
 		select a.*
 				, m.nickname as `writer`
@@ -31,7 +37,13 @@
 			on a.memberId = m.id
 			where a.id = #{id}
 	</select> 
-    
+	
+	<select id="getArticleHitCnt" resultType="int">
+		SELECT hitCnt
+			FROM article
+			WHERE id = #{id}
+	</select>
+	
 	<select id="getArticles" resultType="Article">
 		SELECT a.*
 	        	, m.nickname AS `writer`
@@ -100,4 +112,5 @@
 			</if>
 	</select>
 	
+
 </mapper>

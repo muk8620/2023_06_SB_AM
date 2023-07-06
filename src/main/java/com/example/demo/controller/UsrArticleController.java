@@ -14,6 +14,7 @@ import com.example.demo.service.BoardService;
 import com.example.demo.util.Util;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
 @Controller
@@ -99,6 +100,24 @@ public class UsrArticleController {
 
 		return "usr/article/detail";
 	}
+	
+	@RequestMapping("/usr/article/doIncreaseHitCnt")
+	@ResponseBody
+	public ResultData doIncreaseHitCnt(int id) {
+		
+		ResultData increaseHitCntRd = articleService.increaseHitCnt(id);
+		
+		if (increaseHitCntRd.isFail()) {
+			return increaseHitCntRd;
+		}
+		
+		ResultData rd = ResultData.from(increaseHitCntRd.getResultCode(), increaseHitCntRd.getMsg(), "hitCnt", articleService.getArticleHitCnt(id));
+		
+		rd.setData2("id", id);
+		
+		return rd;
+	}
+	
 
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int id) {

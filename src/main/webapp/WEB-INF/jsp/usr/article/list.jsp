@@ -33,7 +33,7 @@
 							<option value="body">내용</option>
 							<option value="title,body">제목 + 내용</option>
 						</select>
-						<input id="searchKeyword" name="searchKeyword" class="mr-2 input input-bordered input-sm input-accent w-64" type="text" placeholder="검색어를 입력해주세요." value="${searchKeyword }"/>
+						<input name="searchKeyword" class="mr-2 input input-bordered input-sm input-accent w-64" type="text" placeholder="검색어를 입력해주세요." value="${searchKeyword }"/>
 						<button class="btn btn-outline btn-sm">검색</button>
 					</form>
 				</div>

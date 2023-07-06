@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.vo.Article;
+import com.example.demo.vo.ResultData;
 
 @Mapper
 public interface ArticleDao {
@@ -23,5 +24,9 @@ public interface ArticleDao {
 
 	public Article getForPrintArticle(int id);
 
-	public int getArticlesCnt(int boardId, String searchKeyword, String searchKeywordType); 
+	public int getArticlesCnt(int boardId, String searchKeyword, String searchKeywordType);
+
+	public int increaseHitCnt(int id);
+	
+	public int getArticleHitCnt(int id);
 }
