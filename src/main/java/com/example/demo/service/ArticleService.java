@@ -55,18 +55,8 @@ public class ArticleService {
 		return articleDao.getArticlesCnt(boardId, searchKeyword, searchKeywordType);
 	}
 
-	public ResultData increaseHitCnt(int id) {
-		int affectedRowsCnt = articleDao.increaseHitCnt(id);
-		
-		if (affectedRowsCnt == 0) {
-			return ResultData.from("F-1", "해당 게시물은 존재하지 않습니다.");
-		}
-		
-		return ResultData.from("S-1", "조회수 증가");
-	}
-
-	public int getArticleHitCnt(int id) {
-		return articleDao.getArticleHitCnt(id);
+	public void increaseHitCnt(int id) {
+		 articleDao.increaseHitCnt(id);
 	}
 	
 }

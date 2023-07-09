@@ -18,5 +18,8 @@ public class Article {
 	private int hitCnt;
 	
 	private String writer;
+	private int goodReactionPoint;
+	private int badReactionPoint;
+	private int sumReactionPoint;
 	private String boardName;
 }

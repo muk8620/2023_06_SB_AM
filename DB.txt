@@ -12,6 +12,7 @@ CREATE TABLE article(
 
 ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
 ALTER TABLE article ADD COLUMN boardId INT UNSIGNED NOT NULL AFTER memberId;
+ALTER TABLE article ADD COLUMN hitCnt INT UNSIGNED NOT NULL DEFAULT 0;
 
 CREATE TABLE `member`(
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -38,6 +39,16 @@ CREATE TABLE board(
     delDate DATETIME COMMENT '삭제 날짜'
 );
 
+CREATE TABLE reactionPoint(
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT
+    , regDate DATETIME NOT NULL
+    , updateDate DATETIME NOT NULL
+    , memberId INT UNSIGNED NOT NULL
+    , relTypeCode VARCHAR(20) NOT NULL COMMENT '관련 데이터 타입 코드'
+    , relId INT UNSIGNED NOT NULL COMMENT '관련 데이터 번호'
+    , `point` INT NOT NULL DEFAULT 0 COMMENT '좋아요 1, 싫어요 -1 아무것도 안함 0' 
+);
+
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -49,7 +60,7 @@ title = '제목1',
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-memberId = 2,
+memberId = 3,
 boardId = 2,
 title = '제목2',
 `body` = '내용2';
@@ -59,8 +70,8 @@ SET regDate = NOW(),
 updateDate = NOW(),
 memberId = 1,
 boardId = 1,
-title = '제목4',
-`body` = '내용4';
+title = '공지1',
+`body` = '공지사항1';
 
 INSERT INTO `member`
 SET regDate = NOW(),
@@ -76,12 +87,22 @@ email = 'admin@gmail.com';
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
-loginId = 'test',
-loginPw = 'test',
-`name` = 'test',
-nickname = 'test',
+loginId = 'test2',
+loginPw = 'test2',
+`name` = 'test2',
+nickname = 'test2',
 cellphoneNum = '01011112222',
-email = 'test@gmail.com';
+email = 'test2@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test3',
+loginPw = 'test3',
+`name` = 'test3',
+nickname = 'test3',
+cellphoneNum = '01033334444',
+email = 'test3@gmail.com';
 
 INSERT INTO board
 SET regDate = NOW(),
@@ -95,9 +116,57 @@ updateDate = NOW(),
 `code` = 'free',
 `name` = '자유';
 
+# 2번 회원이 1번 글 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW()
+, updateDate = NOW()
+, memberId = 2
+, relTypeCode = 'article'
+, relId = 1
+, `point`= 1;
+
+# 2번 회원이 2번 글 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW()
+, updateDate = NOW()
+, memberId = 2
+, relTypeCode = 'article'
+, relId = 2
+, `point`= -1;
+
+# 2번 회원이 3번 글 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW()
+, updateDate = NOW()
+, memberId = 2
+, relTypeCode = 'article'
+, relId = 3
+, `point`= -1;
+
+# 3번 회원이 2번 글 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW()
+, updateDate = NOW()
+, memberId = 3
+, relTypeCode = 'article'
+, relId = 2
+, `point`= 1;
+
+# 3번 회원이 3번 글 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW()
+, updateDate = NOW()
+, memberId = 3
+, relTypeCode = 'article'
+, relId = 3
+, `point`= 1;
+
+
 SELECT * FROM article;
 SELECT * FROM `member`;
 SELECT * FROM board;
+SELECT * FROM reactionPoint;
+
 
 SELECT LAST_INSERT_ID();
 
@@ -106,8 +175,23 @@ insert into article
 (
     regDate, updateDate, memberId, boardId, title, `body`
 )
-select now(), now(), FLOOR(RAND() * 2) + 1, FLOOR(RAND() * 2) + 1, concat('제목_', rand()), CONCAT('내용_', RAND())
+select now(), now(), FLOOR(RAND() * 3) + 1, 2, concat('제목_', rand()), CONCAT('내용_', RAND())
+from article;
+
+insert into article
+(
+    regDate, updateDate, memberId, boardId, title, `body`
+)
+select now(), now(), 1, 1, concat('공지_', rand()), CONCAT('공지사항_', RAND())
 from article;
 */
 
-SELECT FLOOR(RAND() * 2) + 1;
+SELECT r.point AS `goodPoint` 
+        , m.nickname AS `writer` 
+        , a.id 
+    FROM reactionPoint AS r 
+    INNER JOIN `member` AS m 
+    ON r.memberId = m.id 
+    INNER JOIN 
+    ON a.id = r.relId 
+    WHERE a.id = #{id} 

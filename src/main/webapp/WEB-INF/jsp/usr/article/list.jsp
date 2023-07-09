@@ -46,6 +46,7 @@
 							<th>작성일</th>
 							<th>제목</th>
 							<th>작성자</th>
+							<th>추천</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -55,6 +56,7 @@
 								<td>${article.regDate.substring(2, 16) }</td>
 								<td><a class="hover:underline" href="detail?id=${article.id }">${article.title }</a></td>
 								<td>${article.writer }</td>
+								<td>${article.sumReactionPoint }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -38,12 +38,6 @@
 			where a.id = #{id}
 	</select> 
 	
-	<select id="getArticleHitCnt" resultType="int">
-		SELECT hitCnt
-			FROM article
-			WHERE id = #{id}
-	</select>
-	
 	<select id="getArticles" resultType="Article">
 		SELECT a.*
 	        	, m.nickname AS `writer`
@@ -53,7 +47,7 @@
 		    where a.boardId = #{boardId } 
 		    <if test="searchKeyword != ''">
 				<choose>
-					<when test="searchKeywordType == 'body'">
+					<when test="searchKeywordType == 'title'">
 						AND a.title like CONCAT('%', #{searchKeyword }, '%')
 					</when>
 					<when test="searchKeywordType == 'body'">
@@ -96,7 +90,7 @@
 			WHERE boardId = #{boardId}
 		    <if test="searchKeyword != ''">
 				<choose>
-					<when test="searchKeywordType == 'body'">
+					<when test="searchKeywordType == 'title'">
 						AND title like CONCAT('%', #{searchKeyword }, '%')
 					</when>
 					<when test="searchKeywordType == 'body'">
