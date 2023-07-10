@@ -30,21 +30,52 @@
 	</update>	
 	
 	<select id="getForPrintArticle" resultType="Article">
+		WITH goodPointList AS
+		(
+		  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
+		    FROM reactionPoint 
+		    WHERE `point` = 1
+		    GROUP BY relTypeCode, relId
+		), badPointList AS
+		(
+		  SELECT relTypeCode, relId, SUM(`point`) AS badReactionPoint
+		    FROM reactionPoint
+		    WHERE `point` = -1 
+		    GROUP BY relTypeCode, relId
+		)
 		select a.*
 				, m.nickname as `writer`
+				, g.goodReactionPoint
+				, b.badReactionPoint
 			from article as a
 			inner join `member` as m
 			on a.memberId = m.id
+			INNER JOIN goodPointList AS g
+		    ON a.id = g.relId
+		    INNER JOIN badPointList AS b
+		    ON a.id = b.relId
 			where a.id = #{id}
 	</select> 
 	
 	<select id="getArticles" resultType="Article">
+		WITH sumPointList AS
+		(
+		  SELECT relTypeCode
+		        , relId
+		        , SUM(`point`) AS sumReactionPoint
+		    FROM reactionPoint
+		    GROUP BY relTypeCode, relId
+		)
+		
 		SELECT a.*
-	        	, m.nickname AS `writer`
-	    	FROM article AS a
-	    	INNER JOIN `member` AS m
+		        , m.nickname AS `writer`
+		        , p.sumReactionPoint
+		    FROM article AS a
+		    INNER JOIN `member` AS m
 		    ON a.memberId = m.id
-		    where a.boardId = #{boardId } 
+		    INNER JOIN sumPointList AS p
+		    ON a.id = p.relId
+		    WHERE a.boardId = #{boardId}
 		    <if test="searchKeyword != ''">
 				<choose>
 					<when test="searchKeywordType == 'title'">

@@ -25,8 +25,8 @@
 						<tr>
 							<th>추천</th>
 							<td>
-							<span id="articleDetail_increaseHitCnt">${article.hitCnt }</span>
-							<span id="articleDetail_increaseHitCnt">${article.hitCnt }</span>
+							<span >${article.goodReactionPoint }</span>
+							<span >${article.badReactionPoint }</span>
 							</td>
 						</tr>
 						<tr>

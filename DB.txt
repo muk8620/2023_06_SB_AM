@@ -186,12 +186,63 @@ select now(), now(), 1, 1, concat('공지_', rand()), CONCAT('공지사항_', RA
 from article;
 */
 
-SELECT r.point AS `goodPoint` 
-        , m.nickname AS `writer` 
-        , a.id 
-    FROM reactionPoint AS r 
-    INNER JOIN `member` AS m 
-    ON r.memberId = m.id 
-    INNER JOIN 
-    ON a.id = r.relId 
-    WHERE a.id = #{id} 
+WITH goodPointList AS
+(
+  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
+    FROM reactionPoint 
+    WHERE `point` = 1
+    GROUP BY relTypeCode, relId
+), badPointList AS
+(
+  SELECT relTypeCode, relId, SUM(`point`) AS badReactionPoint
+    FROM reactionPoint
+    WHERE `point` = -1 
+    GROUP BY relTypeCode, relId
+)
+
+WITH sumPointList AS
+(
+  SELECT relTypeCode
+        , relId
+        , SUM(`point`) AS sumReactionPoint
+    FROM reactionPoint
+    GROUP BY relTypeCode, relId
+)
+
+WITH goodPointList AS
+(
+  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
+    FROM reactionPoint 
+    WHERE `point` = 1
+    GROUP BY relTypeCode, relId
+)
+
+SELECT a.*
+        , m.nickname AS `writer`
+        , p.sumReactionPoint
+    FROM article AS a
+    INNER JOIN `member` AS m
+    ON a.memberId = m.id
+    INNER JOIN sumPointList AS p
+    ON a.id = p.relId
+    WHERE a.boardId = 2
+    ORDER BY id DESC
+    LIMIT 0, 1
+WITH goodPointList AS
+		(
+		  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
+		    FROM reactionPoint 
+		    WHERE `point` = 1
+		    GROUP BY relTypeCode, relId
+		)
+		SELECT a.*
+				, m.nickname AS `writer`
+				, goodPointList.goodReactionPoint
+				
+			FROM article AS a
+			INNER JOIN `member` AS m
+			ON a.memberId = m.id
+			INNER JOIN goodPointList AS g
+		    ON a.id = g.relId
+		    
+			WHERE a.id = 1
