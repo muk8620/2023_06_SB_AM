@@ -25,8 +25,8 @@
 						<tr>
 							<th>추천</th>
 							<td>
-							<span >${article.goodReactionPoint }</span>
-							<span >${article.badReactionPoint }</span>
+							<span >좋아요 : ${article.goodReactionPoint }</span>
+							<span >싫어요 : ${article.badReactionPoint }</span>
 							</td>
 						</tr>
 						<tr>

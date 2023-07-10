@@ -124,8 +124,6 @@ public class UsrArticleController {
 			resp.addCookie(newCookie);
 		}
 		
-		articleService.increaseHitCnt(id);
-		
 		Article article = articleService.getForPrintArticle(id);
 		
 		model.addAttribute("article", article);

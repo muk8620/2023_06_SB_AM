@@ -30,51 +30,32 @@
 	</update>	
 	
 	<select id="getForPrintArticle" resultType="Article">
-		WITH goodPointList AS
-		(
-		  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
-		    FROM reactionPoint 
-		    WHERE `point` = 1
-		    GROUP BY relTypeCode, relId
-		), badPointList AS
-		(
-		  SELECT relTypeCode, relId, SUM(`point`) AS badReactionPoint
-		    FROM reactionPoint
-		    WHERE `point` = -1 
-		    GROUP BY relTypeCode, relId
-		)
 		select a.*
 				, m.nickname as `writer`
-				, g.goodReactionPoint
-				, b.badReactionPoint
+				, SUM(IF(rp.point &gt; 0, rp.point, 0)) AS goodReactionPoint
+		        , SUM(IF(rp.point &lt; 0, rp.point, 0)) AS badReactionPoint
 			from article as a
 			inner join `member` as m
 			on a.memberId = m.id
-			INNER JOIN goodPointList AS g
-		    ON a.id = g.relId
-		    INNER JOIN badPointList AS b
-		    ON a.id = b.relId
+			LEFT JOIN reactionPoint AS rp
+		    ON rp.relTypeCode = 'article'
+		    AND a.id = rp.relId
 			where a.id = #{id}
+			GROUP BY a.id
 	</select> 
 	
 	<select id="getArticles" resultType="Article">
-		WITH sumPointList AS
-		(
-		  SELECT relTypeCode
-		        , relId
-		        , SUM(`point`) AS sumReactionPoint
-		    FROM reactionPoint
-		    GROUP BY relTypeCode, relId
-		)
-		
 		SELECT a.*
 		        , m.nickname AS `writer`
-		        , p.sumReactionPoint
+		        , IFNULL(SUM(rp.point), 0) AS sumReactionPoint
+		        , SUM(IF(rp.point &gt; 0, rp.point, 0)) AS goodReactionPoint
+		        , SUM(IF(rp.point &lt; 0, rp.point, 0)) AS badReactionPoint
 		    FROM article AS a
 		    INNER JOIN `member` AS m
 		    ON a.memberId = m.id
-		    INNER JOIN sumPointList AS p
-		    ON a.id = p.relId
+		    LEFT JOIN reactionPoint AS rp
+		    ON rp.relTypeCode = 'article'
+		    AND a.id = rp.relId
 		    WHERE a.boardId = #{boardId}
 		    <if test="searchKeyword != ''">
 				<choose>
@@ -92,7 +73,8 @@
 					</otherwise>
 				</choose>
 			</if>
-		    ORDER BY id DESC
+			GROUP BY a.id
+		    ORDER BY a.id DESC
 		    LIMIT #{limitStart}, ${itemsInAPage}
 	</select>
 	
