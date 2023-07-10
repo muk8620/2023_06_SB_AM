@@ -5,6 +5,21 @@
 
 <c:set var="pageTitle" value="Detail"/>
 <%@ include file= "../common/header.jsp" %>
+<script>
+	function ArticleDetail_increaseHitCnt() {
+		$.get('doIncreaseHitCnt', {
+			id : ${article.id}
+		}, function(data){
+			$('#articleDetail_increaseHitCnt').empty().html(data.data1);
+		}, 'json')
+		
+	}
+	
+	$(function(){
+		ArticleDetail_increaseHitCnt();
+	})
+	
+</script>
 
 	<section class="mt-8">
 		<div class="container mx-auto">
@@ -25,8 +40,19 @@
 						<tr>
 							<th>추천</th>
 							<td>
-							<span >좋아요 : ${article.goodReactionPoint }</span>
-							<span >싫어요 : ${article.badReactionPoint }</span>
+								<c:if test="${rq.getLoginedMemberId() == 0 }">
+									<span>${article.sumReactionPoint }</span>
+								</c:if>
+								<c:if test="${rq.getLoginedMemberId() != 0 }">
+									<div>
+										<a class="btn btn-outline btn-info btn-xs" href="#">좋아요👍 </a>
+										<span class="ml-2">좋아요 : ${article.goodReactionPoint }</span>
+									</div>
+									<div class="mt-2">
+										<a class="btn btn-outline btn-error btn-xs" href="">싫어요👎 </a>
+										<span class="ml-2">싫어요 : ${article.badReactionPoint }</span>
+									</div>
+								</c:if>
 							</td>
 						</tr>
 						<tr>
@@ -53,9 +79,9 @@
 				</table>
 			</div>
 			<div> 
-				<button class="btn btn-active btn-neutral" onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
+				<button class="btn btn-accent btn-neutral" onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
 				
-				<c:if test="${loginedMemberId == article.memberId }">
+				<c:if test="${rq.getLoginedMemberId() == article.memberId }">
 					<a class="btn btn-active btn-neutral" href="modify?id=${article.id}">수정</a>
 					<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 				</c:if>

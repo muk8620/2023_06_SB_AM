@@ -164,11 +164,11 @@ SET regDate = NOW()
 
 SELECT * FROM article;
 SELECT * FROM `member`;
-SELECT * FROM board;
+SELECT * FROM board;    
 SELECT * FROM reactionPoint;
 
 
-SELECT LAST_INSERT_ID();
+-- SELECT LAST_INSERT_ID();
 
 /*
 insert into article
@@ -186,63 +186,37 @@ select now(), now(), 1, 1, concat('공지_', rand()), CONCAT('공지사항_', RA
 from article;
 */
 
-WITH goodPointList AS
-(
-  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
-    FROM reactionPoint 
-    WHERE `point` = 1
-    GROUP BY relTypeCode, relId
-), badPointList AS
-(
-  SELECT relTypeCode, relId, SUM(`point`) AS badReactionPoint
-    FROM reactionPoint
-    WHERE `point` = -1 
-    GROUP BY relTypeCode, relId
-)
+/*
+ SELECT a.*
+         , m.nickname AS `writer`
+         , IFNULL(SUM(rp.point), 0) as sumReactionPoint
+         , sum(if(rp.point > 0, rp.point, 0)) AS goodReactionPoint
+         , SUM(IF(rp.point < 0, rp.point, 0)) AS badReactionPoint
+     FROM article AS a
+     INNER JOIN `member` AS m
+     ON a.memberId = m.id
+     left JOIN reactionPoint AS rp
+     ON rp.relTypeCode = 'article'
+     and a.id = rp.relId
+     WHERE a.boardId = 2
+*/
 
-WITH sumPointList AS
-(
-  SELECT relTypeCode
-        , relId
-        , SUM(`point`) AS sumReactionPoint
-    FROM reactionPoint
-    GROUP BY relTypeCode, relId
-)
 
-WITH goodPointList AS
-(
-  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
-    FROM reactionPoint 
-    WHERE `point` = 1
-    GROUP BY relTypeCode, relId
+WITH am AS (
+    SELECT a.*
+            ,m.nickname AS `writer`
+        FROM article AS a
+        INNER JOIN `member` AS m
+        ON a.memberId = m.id
+        WHERE a.boardId = 2
 )
-
-SELECT a.*
-        , m.nickname AS `writer`
-        , p.sumReactionPoint
-    FROM article AS a
-    INNER JOIN `member` AS m
-    ON a.memberId = m.id
-    INNER JOIN sumPointList AS p
-    ON a.id = p.relId
-    WHERE a.boardId = 2
-    ORDER BY id DESC
-    LIMIT 0, 1
-WITH goodPointList AS
-		(
-		  SELECT relTypeCode, relId, SUM(`point`) AS goodReactionPoint
-		    FROM reactionPoint 
-		    WHERE `point` = 1
-		    GROUP BY relTypeCode, relId
-		)
-		SELECT a.*
-				, m.nickname AS `writer`
-				, goodPointList.goodReactionPoint
-				
-			FROM article AS a
-			INNER JOIN `member` AS m
-			ON a.memberId = m.id
-			INNER JOIN goodPointList AS g
-		    ON a.id = g.relId
-		    
-			WHERE a.id = 1
+ SELECT am.*
+         , IFNULL(SUM(rp.point), 0) AS sumReactionPoint
+         , SUM(IF(rp.point > 0, rp.point, 0)) AS goodReactionPoint
+         , SUM(IF(rp.point < 0, rp.point, 0)) AS badReactionPoint
+     FROM am
+     LEFT JOIN reactionPoint AS rp
+     ON rp.relTypeCode = 'article'
+     AND am.id = rp.relId
+     GROUP BY am.id
+     ORDER BY am.id DESC

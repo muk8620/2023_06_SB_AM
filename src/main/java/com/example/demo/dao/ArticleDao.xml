@@ -32,6 +32,7 @@
 	<select id="getForPrintArticle" resultType="Article">
 		select a.*
 				, m.nickname as `writer`
+				, IFNULL(sum(rp.point), 0) as sumReactionPoint
 				, SUM(IF(rp.point &gt; 0, rp.point, 0)) AS goodReactionPoint
 		        , SUM(IF(rp.point &lt; 0, rp.point, 0)) AS badReactionPoint
 			from article as a
@@ -45,37 +46,42 @@
 	</select> 
 	
 	<select id="getArticles" resultType="Article">
-		SELECT a.*
-		        , m.nickname AS `writer`
-		        , IFNULL(SUM(rp.point), 0) AS sumReactionPoint
-		        , SUM(IF(rp.point &gt; 0, rp.point, 0)) AS goodReactionPoint
+		WITH am AS (
+    		SELECT a.*
+		            ,m.nickname AS `writer`
+		        FROM article AS a
+		        INNER JOIN `member` AS m
+		        ON a.memberId = m.id
+		        WHERE a.boardId = #{boardId}
+			    <if test="searchKeyword != ''">
+					<choose>
+						<when test="searchKeywordType == 'title'">
+							AND a.title like CONCAT('%', #{searchKeyword }, '%')
+						</when>
+						<when test="searchKeywordType == 'body'">
+							AND a.body like CONCAT('%', #{searchKeyword }, '%')
+						</when>
+						<otherwise>
+							AND (
+							 	a.title like CONCAT('%', #{searchKeyword }, '%')
+								OR a.body like CONCAT('%', #{searchKeyword }, '%')
+							)
+						</otherwise>
+					</choose>
+				</if>
+		)
+		SELECT am.*
+		        , IFNULL(sum(rp.point), 0) as sumReactionPoint
+		        , sum(IF(rp.point &gt; 0, rp.point, 0)) AS goodReactionPoint
 		        , SUM(IF(rp.point &lt; 0, rp.point, 0)) AS badReactionPoint
-		    FROM article AS a
-		    INNER JOIN `member` AS m
-		    ON a.memberId = m.id
-		    LEFT JOIN reactionPoint AS rp
+		    FROM am
+		    left JOIN reactionPoint AS rp
 		    ON rp.relTypeCode = 'article'
-		    AND a.id = rp.relId
-		    WHERE a.boardId = #{boardId}
-		    <if test="searchKeyword != ''">
-				<choose>
-					<when test="searchKeywordType == 'title'">
-						AND a.title like CONCAT('%', #{searchKeyword }, '%')
-					</when>
-					<when test="searchKeywordType == 'body'">
-						AND a.body like CONCAT('%', #{searchKeyword }, '%')
-					</when>
-					<otherwise>
-						AND (
-						 	a.title like CONCAT('%', #{searchKeyword }, '%')
-							OR a.body like CONCAT('%', #{searchKeyword }, '%')
-						)
-					</otherwise>
-				</choose>
-			</if>
-			GROUP BY a.id
-		    ORDER BY a.id DESC
+		    and am.id = rp.relId
+		    GROUP BY am.id
+		    ORDER BY am.id DESC
 		    LIMIT #{limitStart}, ${itemsInAPage}
+		    
 	</select>
 	
 	<update id="modifyArticle" >
