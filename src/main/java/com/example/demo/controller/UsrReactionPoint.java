@@ -19,18 +19,27 @@ public class UsrReactionPoint {
 	
 	@RequestMapping("/usr/reaction/doIncreaseGoodReaction")
 	@ResponseBody
-	public ResultData doIncreaseHitCnt(int id) {
+	public ResultData doIncreaseHitCnt(String relTypeCode, int relId, int point) {
 		
-		ResultData increaseHitCntRd = reactionPointService.doIncreaseGoodReaction(id);
+		ResultData increaseHitCntRd = reactionPointService.doUpdateGoodReactionPoint(relTypeCode, relId, point);
 		
 		if (increaseHitCntRd.isFail()) {
 			return increaseHitCntRd;
 		}
 		
-		ResultData rd = ResultData.from(increaseHitCntRd.getResultCode(), increaseHitCntRd.getMsg(), "hitCnt", articleService.getArticleHitCnt(id));
+//		ResultData rd = ResultData.from(increaseHitCntRd.getResultCode(), increaseHitCntRd.getMsg(), "hitCnt", );
+//		
+//		rd.setData2("id", id);
 		
-		rd.setData2("id", id);
+		return null;
+	}
+	
+	@RequestMapping("/usr/reaction/showReactionPoint")
+	@ResponseBody
+	public ResultData showReactionPoint(String relTypeCode, int relId, int memberId) {
 		
-		return rd;
+		ResultData reactionPointRd = reactionPointService.showReactionPoint(relTypeCode, relId, memberId);
+		
+		return reactionPointRd;
 	}
 }

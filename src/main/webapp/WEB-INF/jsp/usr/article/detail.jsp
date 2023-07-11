@@ -6,17 +6,30 @@
 <c:set var="pageTitle" value="Detail"/>
 <%@ include file= "../common/header.jsp" %>
 <script>
-	function ArticleDetail_increaseHitCnt() {
-		$.get('doIncreaseHitCnt', {
-			id : ${article.id}
+	function ArticleDetail_showReactionPoint() {
+		$.get('../reaction/showReactionPoint', {
+			relTypeCode : 'article',
+			relId : ${article.id},
+			memberId : ${rq.getLoginedMemberId()}
 		}, function(data){
-			$('#articleDetail_increaseHitCnt').empty().html(data.data1);
+			console.log(data);
+			
+			if (data.data1 == 1) {
+				$('#articleDetail_showGoodReactionPoint').attr("class", "btn btn-info btn-xs");
+				return;
+			}
+			
+			if (data.data1 == -1) {
+				$('#articleDetail_showBadReactionPoint').attr("class", "btn btn-error btn-xs");
+				return;
+			}
+			
 		}, 'json')
 		
 	}
 	
 	$(function(){
-		ArticleDetail_increaseHitCnt();
+		ArticleDetail_showReactionPoint();
 	})
 	
 </script>
@@ -45,11 +58,11 @@
 								</c:if>
 								<c:if test="${rq.getLoginedMemberId() != 0 }">
 									<div>
-										<a class="btn btn-outline btn-info btn-xs" href="#">좋아요👍 </a>
+										<a id="articleDetail_showGoodReactionPoint" class="btn btn-outline btn-info btn-xs" href="#">좋아요👍 </a>
 										<span class="ml-2">좋아요 : ${article.goodReactionPoint }</span>
 									</div>
 									<div class="mt-2">
-										<a class="btn btn-outline btn-error btn-xs" href="">싫어요👎 </a>
+										<a id="articleDetail_showBadReactionPoint" class="btn btn-outline btn-error btn-xs" href="">싫어요👎 </a>
 										<span class="ml-2">싫어요 : ${article.badReactionPoint }</span>
 									</div>
 								</c:if>
