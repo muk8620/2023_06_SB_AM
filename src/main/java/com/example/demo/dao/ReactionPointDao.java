@@ -13,8 +13,7 @@ public interface ReactionPointDao {
 		
 	@Delete("""
 			DELETE FROM reactionPoint
-                WHERE `point`= #{point}
-                AND memberId = #{memberId}
+                WHERE memberId = #{memberId}
 			    AND relTypeCode = #{relTypeCode}
 			    AND relId = #{relId}
 			""")
@@ -23,21 +22,21 @@ public interface ReactionPointDao {
 	@Insert("""
 			INSERT INTO reactionPoint
 				SET regDate = NOW()
-				, updateDate = NOW()
-				, memberId = #{memberId}
-				, relTypeCode = #{relTypeCode}
-				, relId = #{relId}
-				, `point`= #{point}
+					, updateDate = NOW()
+					, memberId = #{memberId}
+					, relTypeCode = #{relTypeCode}
+					, relId = #{relId}
+					, `point`= #{point}
 			""")
 	void doInsertReactionPoint(String relTypeCode, int relId, int memberId, int point);
 	
 	@Select("""
-			SELECT * 
+			SELECT IFNULL(SUM(point), 0) as sumReactionPoint 
 			    FROM reactionPoint
 			    WHERE relTypeCode = #{relTypeCode}
 			    AND relId = #{relId}
 			    AND memberId = #{memberId}
 			""")
-	ReactionPoint showReactionPoint(String relTypeCode, int relId, int memberId);
+	ReactionPoint getReactionPoint(String relTypeCode, int relId, int memberId);
 
 }

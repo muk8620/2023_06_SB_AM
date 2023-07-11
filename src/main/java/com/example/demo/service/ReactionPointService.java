@@ -16,15 +16,11 @@ public class ReactionPointService {
 		this.reactionPointDao = reactionPointDao;
 	}
 	
-	public ResultData showReactionPoint(String relTypeCode, int relId, int memberId) {
+	public ReactionPoint getReactionPoint(String relTypeCode, int relId, int memberId) {
 		
-		ReactionPoint reactionpoint = reactionPointDao.showReactionPoint(relTypeCode, relId, memberId);
+		ReactionPoint reactionpoint = reactionPointDao.getReactionPoint(relTypeCode, relId, memberId);
 		
-		if (reactionpoint == null) {
-			return ResultData.from("F-1", "추천 기록 없음", "point", 0);
-		}
-		
-		return ResultData.from("S-1", "추천 기록 있음", "point", reactionpoint.getPoint());
+		return reactionpoint;
 	}
 
 	public int doDeleteReactionPoint(String relTypeCode, int relId, int memberId, int point) {

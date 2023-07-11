@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Util;
+import com.example.demo.vo.ReactionPoint;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -21,34 +22,41 @@ public class UsrReactionPointController {
 		this.rq = rq;
 	}
 	
-	@RequestMapping("/usr/reaction/showReactionPoint")
+	@RequestMapping("/usr/reactionPoint/getReactionPoint")
 	@ResponseBody
-	public ResultData showReactionPoint(String relTypeCode, int relId, int memberId) {
+	public ResultData<ReactionPoint> getReactionPoint(String relTypeCode, int relId) {
 		
-		ResultData reactionPointRd = reactionPointService.showReactionPoint(relTypeCode, relId, memberId);
+		ReactionPoint reactionPoint = reactionPointService.getReactionPoint(relTypeCode, relId, rq.getLoginedMemberId());
 		
-		return reactionPointRd;
+		return ResultData.from("S-1", "리액션 정보 조회 성공", "reactionPoint", reactionPoint);
 	}
 	
-	@RequestMapping("/usr/reaction/doIncreaseReaction")
+	@RequestMapping("/usr/reactionPoint/doInsertReactionPoint")
 	@ResponseBody
-	public String doIncreaseHitCnt(String relTypeCode, int relId, int memberId, int point) {
+	public String doInsertReactionPoint(String relTypeCode, int relId, int point) {
 		
-		ResultData reactionPointRd = reactionPointService.showReactionPoint(relTypeCode, relId, memberId);
+		reactionPointService.doDeleteReactionPoint(relTypeCode, relId, rq.getLoginedMemberId(), point);
 		
-		if (reactionPointRd.isFail()) {
-			reactionPointService.doInsertReactionPoint(relTypeCode, relId, memberId, point);
+		reactionPointService.doInsertReactionPoint(relTypeCode, relId, rq.getLoginedMemberId(), point);
+		
+		if (point == 1) {
+			return Util.jsReplace(Util.f("%d번 글에 좋아요", relId), Util.f("../article/detail?id=%d", relId));
 		} else {
-			int reactionPointDeleteRd = reactionPointService.doDeleteReactionPoint(relTypeCode, relId, memberId, point);
-			if (reactionPointDeleteRd == 0) {
-				reactionPointService.doDeleteReactionPoint(relTypeCode, relId, memberId, -point);
-				reactionPointService.doInsertReactionPoint(relTypeCode, relId, memberId, point);
-			}
+			return Util.jsReplace(Util.f("%d번 글에 싫어요", relId), Util.f("../article/detail?id=%d", relId));
 		}
 		
-		return Util.jsReplace("",Util.f("/usr/article/detail?id=%d", relId));
-		
 	}
 	
-
+	@RequestMapping("/usr/reactionPoint/doDeleteReactionPoint")
+	@ResponseBody
+	public String doDeleteReactionPoint(String relTypeCode, int relId, int point) {
+		
+		reactionPointService.doDeleteReactionPoint(relTypeCode, relId, rq.getLoginedMemberId(), point);
+		
+		if (point == 1) {
+			return Util.jsReplace(Util.f("%d번 글에 좋아요 취소", relId), Util.f("../article/detail?id=%d", relId));
+		} else {
+			return Util.jsReplace(Util.f("%d번 글에 싫어요 취소", relId), Util.f("../article/detail?id=%d", relId));
+		}
+	}
 }

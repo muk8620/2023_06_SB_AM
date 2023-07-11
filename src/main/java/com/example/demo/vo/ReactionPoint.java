@@ -15,6 +15,6 @@ public class ReactionPoint {
 		private int memberId;
 		private String relTypeCode;
 		private int relId;
-		private int point;
+		private int sumReactionPoint;
 
 }

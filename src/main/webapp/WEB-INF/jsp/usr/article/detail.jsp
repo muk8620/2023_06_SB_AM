@@ -6,21 +6,23 @@
 <c:set var="pageTitle" value="Detail" />
 <%@ include file="../common/header.jsp"%>
 <script>
-	function ArticleDetail_showReactionPoint() {
-		$.get('../reaction/showReactionPoint', {
+	function ArticleDetail_getReactionPoint() {
+		$.get('../reactionPoint/getReactionPoint', {
 			relTypeCode : 'article',
-			relId : ${article.id},
-			memberId : ${rq.getLoginedMemberId()}
+			relId : ${article.id}
 		}, function(data){
-			console.log(data);
 			
-			if (data.data1 == 1) {
-				$('#articleDetail_showGoodReactionPoint').attr("class", "btn btn-info btn-xs");
-				return;
-			}
+			console.log($('#goodBtn').attr('href'));
+			console.log($('#badBtn').prop('href'));
 			
-			if (data.data1 == -1) {
-				$('#articleDetail_showBadReactionPoint').attr("class", "btn btn-error btn-xs");
+			if (data.data1.sumReactionPoint == 1) {
+				let goodBtn = $('#goodBtn');
+				goodBtn.removeClass('btn-outline');
+				goodBtn.attr('href', '../reactionPoint/doDeleteReactionPoint?relTypeCode=article&relId=${article.id }&point=1');
+			} else if (data.data1.sumReactionPoint == -1) {
+				let badBtn = $('#badBtn');
+				badBtn.removeClass('btn-outline');
+				badBtn.attr('href', '../reactionPoint/doDeleteReactionPoint?relTypeCode=article&relId=${article.id }&point=-1');
 			}
 			
 		}, 'json')
@@ -28,7 +30,7 @@
 	}
 	
 	$(function(){
-		ArticleDetail_showReactionPoint();
+		ArticleDetail_getReactionPoint();
 	})
 	
 </script>
@@ -55,15 +57,15 @@
 								<span>${article.sumReactionPoint }</span>
 							</c:if> <c:if test="${rq.getLoginedMemberId() != 0 }">
 								<div>
-									<a id="articleDetail_showGoodReactionPoint"
+									<a id="goodBtn"
 										class="btn btn-outline btn-info btn-xs"
-										href="../reaction/doIncreaseReaction?relTypeCode=article&relId=${article.id }&memberId=${rq.getLoginedMemberId()}&point=1">좋아요👍
+										href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=1">좋아요👍
 									</a> <span class="ml-2">좋아요 : ${article.goodReactionPoint }</span>
 								</div>
 								<div class="mt-2">
-									<a id="articleDetail_showBadReactionPoint"
+									<a id="badBtn"
 										class="btn btn-outline btn-error btn-xs"
-										href="../reaction/doIncreaseReaction?relTypeCode=article&relId=${article.id }&memberId=${rq.getLoginedMemberId()}&point=-1">싫어요👎
+										href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=-1">싫어요👎
 									</a> <span class="ml-2">싫어요 : ${article.badReactionPoint }</span>
 								</div>
 							</c:if></td>
