@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ReactionPointService;
+import com.example.demo.util.Util;
 import com.example.demo.vo.ResultData;
 
 @Controller
@@ -17,23 +18,6 @@ public class UsrReactionPoint {
 		this.reactionPointService = reactionPointService;
 	}
 	
-	@RequestMapping("/usr/reaction/doIncreaseGoodReaction")
-	@ResponseBody
-	public ResultData doIncreaseHitCnt(String relTypeCode, int relId, int point) {
-		
-		ResultData increaseHitCntRd = reactionPointService.doUpdateGoodReactionPoint(relTypeCode, relId, point);
-		
-		if (increaseHitCntRd.isFail()) {
-			return increaseHitCntRd;
-		}
-		
-//		ResultData rd = ResultData.from(increaseHitCntRd.getResultCode(), increaseHitCntRd.getMsg(), "hitCnt", );
-//		
-//		rd.setData2("id", id);
-		
-		return null;
-	}
-	
 	@RequestMapping("/usr/reaction/showReactionPoint")
 	@ResponseBody
 	public ResultData showReactionPoint(String relTypeCode, int relId, int memberId) {
@@ -42,4 +26,22 @@ public class UsrReactionPoint {
 		
 		return reactionPointRd;
 	}
+	
+	@RequestMapping("/usr/reaction/doIncreaseReaction")
+	@ResponseBody
+	public String doIncreaseHitCnt(String relTypeCode, int relId, int memberId, int point) {
+		
+		ResultData reactionPointRd = reactionPointService.showReactionPoint(relTypeCode, relId, memberId);
+		
+		if (reactionPointRd.isFail()) {
+			reactionPointService.doInsertReactionPoint(relTypeCode, relId, memberId, point);
+			return Util.jsReplace("",Util.f("/usr/article/detail?id=%d", relId));
+		} 
+		
+		reactionPointService.doUpdateReactionPoint(relTypeCode, relId, memberId, point);
+		return Util.jsReplace("",Util.f("/usr/article/detail?id=%d", relId));
+		
+	}
+	
+
 }

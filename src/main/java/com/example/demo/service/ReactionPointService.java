@@ -15,21 +15,6 @@ public class ReactionPointService {
 	public ReactionPointService(ReactionPointDao reactionPointDao) {
 		this.reactionPointDao = reactionPointDao;
 	}
-
-	public ResultData doUpdateGoodReactionPoint(String relTypeCode, int relId, int point) {
-		
-		reactionPointDao.doUpdateGoodReactionPoint(relTypeCode, relId, point);
-		
-		return null;
-	}
-	
-	public ResultData doUpdateBadReactionPoint(String relTypeCode, int relId, int point) {
-		
-		reactionPointDao.doUpdateBadReactionPoint(relTypeCode, relId, point);
-		
-		return null;
-	}
-	
 	
 	public ResultData showReactionPoint(String relTypeCode, int relId, int memberId) {
 		
@@ -41,4 +26,16 @@ public class ReactionPointService {
 		
 		return ResultData.from("S-1", "추천 기록 있음", "point", reactionpoint.getPoint());
 	}
+
+	public void doUpdateReactionPoint(String relTypeCode, int relId, int memberId, int point) {
+		
+		reactionPointDao.doUpdateReactionPoint(relTypeCode, relId, memberId, point);
+	}
+	
+	public void doInsertReactionPoint(String relTypeCode, int relId, int memberId, int point) {
+		
+		reactionPointDao.doInsertReactionPoint(relTypeCode, relId, memberId, point);
+	}
+	
+
 }

@@ -125,6 +125,7 @@ public class UsrArticleController {
 		}
 		
 		Article article = articleService.getForPrintArticle(id);
+		article.setBadReactionPoint(Math.abs(article.getBadReactionPoint()));
 		
 		model.addAttribute("article", article);
 		
