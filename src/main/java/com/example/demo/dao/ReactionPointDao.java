@@ -11,15 +11,14 @@ import com.example.demo.vo.ReactionPoint;
 @Mapper
 public interface ReactionPointDao {
 		
-	@Update("""
-			UPDATE reactionPoint
-			    SET updateDate = NOW()
-			    , `point`= IF(`point` = #{point}, 0, #{point})
-			    WHERE memberId = #{memberId}
+	@Delete("""
+			DELETE FROM reactionPoint
+                WHERE `point`= #{point}
+                AND memberId = #{memberId}
 			    AND relTypeCode = #{relTypeCode}
 			    AND relId = #{relId}
 			""")
-	void doUpdateReactionPoint(String relTypeCode, int relId, int memberId, int point);
+	int doDeleteReactionPoint(String relTypeCode, int relId, int memberId, int point);
 	
 	@Insert("""
 			INSERT INTO reactionPoint
@@ -28,7 +27,7 @@ public interface ReactionPointDao {
 				, memberId = #{memberId}
 				, relTypeCode = #{relTypeCode}
 				, relId = #{relId}
-				, `point`= #{point};
+				, `point`= #{point}
 			""")
 	void doInsertReactionPoint(String relTypeCode, int relId, int memberId, int point);
 	

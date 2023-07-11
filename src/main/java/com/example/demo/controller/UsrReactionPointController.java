@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Util;
 import com.example.demo.vo.ResultData;
+import com.example.demo.vo.Rq;
 
 @Controller
-public class UsrReactionPoint {
+public class UsrReactionPointController {
 	private ReactionPointService reactionPointService;
+	private Rq rq;
 	
 	@Autowired
-	public UsrReactionPoint(ReactionPointService reactionPointService) {
+	public UsrReactionPointController(ReactionPointService reactionPointService, Rq rq) {
 		this.reactionPointService = reactionPointService;
+		this.rq = rq;
 	}
 	
 	@RequestMapping("/usr/reaction/showReactionPoint")
@@ -35,10 +38,14 @@ public class UsrReactionPoint {
 		
 		if (reactionPointRd.isFail()) {
 			reactionPointService.doInsertReactionPoint(relTypeCode, relId, memberId, point);
-			return Util.jsReplace("",Util.f("/usr/article/detail?id=%d", relId));
-		} 
+		} else {
+			int reactionPointDeleteRd = reactionPointService.doDeleteReactionPoint(relTypeCode, relId, memberId, point);
+			if (reactionPointDeleteRd == 0) {
+				reactionPointService.doDeleteReactionPoint(relTypeCode, relId, memberId, -point);
+				reactionPointService.doInsertReactionPoint(relTypeCode, relId, memberId, point);
+			}
+		}
 		
-		reactionPointService.doUpdateReactionPoint(relTypeCode, relId, memberId, point);
 		return Util.jsReplace("",Util.f("/usr/article/detail?id=%d", relId));
 		
 	}

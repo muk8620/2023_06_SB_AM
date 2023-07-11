@@ -27,9 +27,9 @@ public class ReactionPointService {
 		return ResultData.from("S-1", "추천 기록 있음", "point", reactionpoint.getPoint());
 	}
 
-	public void doUpdateReactionPoint(String relTypeCode, int relId, int memberId, int point) {
+	public int doDeleteReactionPoint(String relTypeCode, int relId, int memberId, int point) {
 		
-		reactionPointDao.doUpdateReactionPoint(relTypeCode, relId, memberId, point);
+		return reactionPointDao.doDeleteReactionPoint(relTypeCode, relId, memberId, point);
 	}
 	
 	public void doInsertReactionPoint(String relTypeCode, int relId, int memberId, int point) {
