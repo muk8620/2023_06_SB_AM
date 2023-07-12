@@ -29,3 +29,7 @@ html > body {
 	color:red;
 	text-decoration: underline;
 }
+
+.border-bottom-line {
+	border-bottom: 1px solid #afafaf;
+}

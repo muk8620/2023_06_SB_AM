@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ReplyService;
 import com.example.demo.util.Util;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Reply;
 import com.example.demo.vo.Rq;
 
 @Controller
@@ -25,12 +27,14 @@ public class UsrArticleController {
 
 	private ArticleService articleService;
 	private BoardService boardService;
+	private ReplyService replyService;
 	private Rq rq;
 
 	@Autowired
-	public UsrArticleController(ArticleService articleService, BoardService boardService, Rq rq) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService, ReplyService replyService, Rq rq) {
 		this.articleService = articleService;
 		this.boardService = boardService;
+		this.replyService = replyService;
 		this.rq = rq;
 	}
 
@@ -127,7 +131,10 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(id);
 		article.setBadReactionPoint(-article.getBadReactionPoint());
 		
+		List<Reply> replies = replyService.getReplies("article", id);
+		
 		model.addAttribute("article", article);
+		model.addAttribute("replies", replies);
 		
 		return "usr/article/detail";
 	}

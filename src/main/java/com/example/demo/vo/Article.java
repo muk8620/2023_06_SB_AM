@@ -22,4 +22,8 @@ public class Article {
 	private int badReactionPoint;
 	private int sumReactionPoint;
 	private String boardName;
+	
+	public String getForPrintBody() {
+		return this.body.replaceAll("\n", "<br />");
+	}
 }
