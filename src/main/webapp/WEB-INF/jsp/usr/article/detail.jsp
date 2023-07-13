@@ -6,11 +6,13 @@
 <c:set var="pageTitle" value="Detail" />
 <%@ include file="../common/header.jsp"%>
 <script>
-	function ArticleDetail_getReactionPoint() {
+	function getReactionPoint() {
 		$.get('../reactionPoint/getReactionPoint', {
 			relTypeCode : 'article',
 			relId : ${article.id}
 		}, function(data){
+			
+			console.log(data);
 			
 			console.log($('#goodBtn').attr('href'));
 			console.log($('#badBtn').prop('href'));
@@ -29,111 +31,149 @@
 		
 	}
 	
+	function modifyReply(replyId, replyMemberId) {
+		$.get('../reply/modify', {
+			memberId : replyMemberId
+		}, function(data){
+			
+			if (data.fail == true) {
+				alert(data.msg);
+			} else {
+				console.log(data);
+				
+				let reply = $('#' + replyId);
+				
+				let div = document.createElement("div");
+				div.innerHTML = `<form action="../reply/doModify" method="POST">
+					<input type="hidden" name="id" value="" /> 
+					<input type="hidden" name="relId" value="${article.id }" />
+					<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
+						<div class="mb-2"><span>${rq.loginedMember.nickname }</span></div>
+						<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨주세요."></textarea>
+						<div class="mt-1 flex justify-end">
+							
+							<button class="btn btn-outline btn-neutral btn-sm">등록</button>
+						</div>
+					</div>
+				</form>`;
+				div.firstElementChild.firstElementChild.value = replyId;
+			
+				reply.after(div);
+				reply.remove();
+				
+			}
+			
+		}, 'json')
+		
+	}
+	
 	$(function(){
-		ArticleDetail_getReactionPoint();
+		getReactionPoint();
 	})
 	
 </script>
 
-	<section class="mt-8">
-		<div class="container mx-auto pb-5 border-bottom-line">
-			<div class="table-box-type-1">
-				<table class="table">
-					<colgroup>
-						<col width="200" />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th>번호</th>
-							<td><span class="badge badge-neutral">${article.id }</span></td>
-						</tr>
-						<tr>
-							<th>조회수</th>
-							<td><span id="articleDetail_increaseHitCnt">${article.hitCnt }</span></td>
-						</tr>
-						<tr>
-							<th>추천</th>
+<section class="mt-8">
+	<div class="container mx-auto pb-5 border-bottom-line">
+		<div class="table-box-type-1">
+			<table class="table">
+				<colgroup>
+					<col width="200" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>번호</th>
+						<td><span class="badge badge-neutral">${article.id }</span></td>
+					</tr>
+					<tr>
+						<th>조회수</th>
+						<td><span id="articleDetail_increaseHitCnt">${article.hitCnt }</span></td>
+					</tr>
+					<tr>
+						<th>추천</th>
 							<td>
-								<c:if test="${rq.getLoginedMemberId() == 0 }">
-									<span>${article.sumReactionPoint }</span>
-								</c:if> 
-								<c:if test="${rq.getLoginedMemberId() != 0 }">
-									<div>
-										<a id="goodBtn"
-											class="btn btn-outline btn-info btn-xs"
-											href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=1">좋아요👍
-										</a> <span class="ml-2">좋아요 : ${article.goodReactionPoint }</span>
-									</div>
-									<div class="mt-2">
-										<a id="badBtn"
-											class="btn btn-outline btn-error btn-xs"
-											href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=-1">싫어요👎
-										</a> <span class="ml-2">싫어요 : ${article.badReactionPoint }</span>
-									</div>
-								</c:if>
+							<c:if test="${rq.getLoginedMemberId() == 0 }">
+								<span>${article.sumReactionPoint }</span>
+							</c:if> 
+							<c:if test="${rq.getLoginedMemberId() != 0 }">
+								<div>
+									<a id="goodBtn" class="btn btn-outline btn-info btn-xs" href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=1">좋아요👍</a><span class="ml-2">좋아요 : ${article.goodReactionPoint }</span>
+								</div>
+								<div class="mt-2">
+									<a id="badBtn" class="btn btn-outline btn-error btn-xs" href="../reactionPoint/doInsertReactionPoint?relTypeCode=article&relId=${article.id }&point=-1">싫어요👎</a><span class="ml-2">싫어요 : ${article.badReactionPoint }</span>
+								</div>
+							</c:if>
 							</td>
-						</tr>
-						<tr>
-							<th>작성일</th>
-							<td>${article.regDate }</td>
-						</tr>
-						<tr>
-							<th>수정일</th>
-							<td>${article.updateDate }</td>
-						</tr>
-						<tr>
-							<th>제목</th>
-							<td>${article.title }</td>
-						</tr>
-						<tr>
-							<th>내용</th>
-							<td>${article.getForPrintBody() }</td>
-						</tr>
-						<tr>
-							<th>작성자</th>
-							<td>${article.writer }</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="mt-2">
-				<button class="btn btn-accent btn-neutral"
-					onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
-	
-				<c:if test="${rq.getLoginedMemberId() == article.memberId }">
-					<a class="btn btn-active btn-neutral" href="modify?id=${article.id}">수정</a>
-					<a class="btn btn-active btn-neutral"
-						href="doDelete?id=${article.id}"
-						onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
-				</c:if>
-			</div>
+					</tr>
+					<tr>
+						<th>작성일</th>
+						<td>${article.regDate }</td>
+					</tr>
+					<tr>
+						<th>수정일</th>
+						<td>${article.updateDate }</td>
+					</tr>
+					<tr>
+						<th>제목</th>
+						<td>${article.title }</td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td>${article.getForPrintBody() }</td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<td>${article.writer }</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-	</section>
+		<div class="mt-2">
+			<button class="btn btn-accent btn-neutral" onclick="location.replace('list?boardId=${article.boardId}');">뒤로가기</button>
 
-	<section class="my-5 text-xl">
-		<div class="container mx-auto px-3 ">
-			<h2>댓글</h2>
-			
-			<c:forEach var="reply" items="${replies }">
-				<div class="text-base py-4 pl-16 border-bottom-line">
-					<div class="font-semibold"><span>${reply.writer }</span></div>
-					<div class="my-1 text-lg pl-2"><span>${reply.getForPrintBody() }</span></div>
-					<div class="text-xs text-gray-400"><span>${reply.updateDate }</span></div>
-				</div>
-			</c:forEach>
-			
-			<c:if test="${rq.getLoginedMemberId() != 0 }">
-				<form action="../reply/doWrite" method="POST">
-					<input type="hidden" name="relTypeCode" value="article"/>
-					<input type="hidden" name="relId" value="${article.id }"/>
-					<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
-						<div class="mb-2"><span>${rq.loginedMember.nickname }</span></div>
-					  	<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨주세요."></textarea>
-					  	<div class="mt-1 flex justify-end"><button class="btn btn-outline btn-neutral btn-sm">등록</button></div>
-					</div>
-				</form>
+			<c:if test="${rq.getLoginedMemberId() == article.memberId }">
+				<a class="btn btn-active btn-neutral" href="modify?id=${article.id}">수정</a>
+				<a class="btn btn-active btn-neutral" href="doDelete?id=${article.id}" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 			</c:if>
 		</div>
-	</section>
+	</div>
+</section>
+
+<section class="my-5 text-xl">
+	<div class="container mx-auto px-3 ">
+		<h2>댓글</h2>
+
+		<c:forEach var="reply" items="${replies }">
+			<div id="${reply.id }" class="text-base py-4 pl-16 border-bottom-line">
+				<div class="flex justify-between items-center">
+					<div class="font-semibold"><span>${reply.writer }</span></div>
+					<c:if test="${reply.memberId == rq.getLoginedMemberId()}">
+						<div class="dropdown">
+							<label tabindex="0" class="btn mr-5">⁝</label>
+							<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box">
+								<li><button class="button btn-outline btn-neutral" onclick="modifyReply(${reply.id }, ${reply.memberId})">수정</button></li>
+								<li><a class="button btn-outline btn-neutral" href="../reply/doDelete?memberId=${reply.memberId }&relId=${article.id }&id=${reply.id }" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a></li>
+							</ul>
+						</div>
+					</c:if>
+				</div>
+				<div class="my-1 text-lg pl-2"><span>${reply.getForPrintBody() }</span></div>
+				<div class="text-xs text-gray-400"><span>${reply.updateDate }</span></div>
+			</div>
+		</c:forEach>
+
+		<c:if test="${rq.getLoginedMemberId() != 0 }">
+			<form action="../reply/doWrite" method="POST">
+				<input type="hidden" name="relTypeCode" value="article" /> 
+				<input type="hidden" name="relId" value="${article.id }" />
+				<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
+					<div class="mb-2"><span>${rq.loginedMember.nickname }</span></div>
+					<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨주세요."></textarea>
+					<div class="mt-1 flex justify-end"><button class="btn btn-outline btn-neutral btn-sm">등록</button></div>
+				</div>
+			</form>
+		</c:if>
+	</div>
+</section>
 
 <%@ include file="../common/footer.jsp"%>
