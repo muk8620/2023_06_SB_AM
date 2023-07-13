@@ -25,11 +25,8 @@ public interface ReplyDao {
 	void writeReply(int loginedMemberId, String relTypeCode, int relId, String body);
 	
 	@Select("""
-			SELECT m.nickname as writer
-					, r.id	
-					, r.memberId
-				    , r.body
-				    , r.updateDate
+			SELECT r.*
+					, m.nickname as writer
 				FROM reply AS r
 				INNER JOIN `member` AS m
 				ON r.memberId = m.id
@@ -43,16 +40,21 @@ public interface ReplyDao {
 			UPDATE reply
 			    SET updateDate = NOW()
 			        , `body` = #{body}
-			    WHERE memberId = #{loginedMemberId}
-				AND id = #{id}
+			    WHERE id = #{id}
 			""")
-	void modifyReply(int loginedMemberId, int id, String body);
+	void modifyReply(int id, String body);
 
 	@Delete("""
 			DELETE FROM reply
-			    WHERE memberId = #{loginedMemberId}
-			    AND id = #{id}
+			    WHERE id = #{id}
 			""")
-	void deleteReply(int loginedMemberId, int id);
+	void deleteReply(int id);
+	
+	@Select("""
+			SELECT *
+				from reply
+				where id = #{id}
+			""")
+	Reply getReply(int id);
 
 }

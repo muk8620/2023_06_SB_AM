@@ -33,12 +33,16 @@ public class ReplyService {
 		return replies;
 	}
 
-	public void modifyReply(int loginedMemberId, int id, String body) {
-		replyDao.modifyReply(loginedMemberId, id, body);
+	public void modifyReply(int id, String body) {
+		replyDao.modifyReply(id, body);
 	}
 
-	public void deleteReply(int loginedMemberId, int id) {
-		replyDao.deleteReply(loginedMemberId, id);
+	public void deleteReply(int id) {
+		replyDao.deleteReply(id);
+	}
+
+	public Reply getReply(int id) {
+		return replyDao.getReply(id);
 	}
 
 }
