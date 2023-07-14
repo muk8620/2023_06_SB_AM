@@ -63,4 +63,12 @@ public class MemberService {
 		return memberDao.getLastInsertId();
 	}
 
+	public void doMemberModify(int loginedMemberId, String nickname, String cellphoneNum, String email) {
+		memberDao.doMemberModify(loginedMemberId, nickname, cellphoneNum, email);
+	}
+
+	public void doPasswordModify(int loginedMemberId, String loginPw) {
+		memberDao.doPasswordModify(loginedMemberId, loginPw);
+	}
+
 }

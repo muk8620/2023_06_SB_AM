@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.service.MemberService;
 import com.example.demo.util.Util;
 
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class Rq {
 	private HttpServletResponse resp;
 	private HttpSession session;
 	
-	public Rq(HttpServletRequest req, HttpServletResponse resp) {
+	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
 		
 		this.req = req;
 		this.resp = resp;
@@ -39,7 +40,7 @@ public class Rq {
 		
 		if(session.getAttribute("loginedMemberId") != null) {
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-			loginedMember = (Member) session.getAttribute("loginedMember");
+			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
 		
 		this.loginedMemberId = loginedMemberId;
@@ -67,12 +68,10 @@ public class Rq {
 
 	public void login(Member member) {
 		this.session.setAttribute("loginedMemberId", member.getId());
-		this.session.setAttribute("loginedMember", member);
 	}
 
 	public void logout() {
 		this.session.removeAttribute("loginedMemberId");
-		this.session.removeAttribute("loginedMember");
 	}
 
 	public String jsReturnOnView(String msg) {
