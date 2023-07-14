@@ -105,36 +105,57 @@
 	</section>
 	
 	<script>
+		
+		let isModifing = null;
+		
+		function modifyForm(replyId, i, resultData) {
+			let replyContent = $('#' + i);
+			
+			let addHtml = `
+				<form action="../reply/doModify" method="POST">
+					<input type="hidden" name="id" value="\${resultData.data1.id}" /> 
+					<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
+						<div class="mb-2"><span>${rq.loginedMember.nickname }</span></div>
+						<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨주세요.">\${resultData.data1.body}</textarea>
+						<div class="mt-1 flex justify-end">
+							<a class="btn btn-outline btn-neutral btn-sm mr-2" onclick="replyModify_cancle(\${i});">취소</a>
+							<button class="btn btn-outline btn-neutral btn-sm">수정</button>
+						</div>
+					</div>
+				</form>
+				`;
+			
+			replyContent.addClass('hidden');
+			replyContent.after(addHtml);
+			
+			console.log(replyContent);
+			isModifing = i;
+		}
+	
 		function replyModify_getForm(replyId, i) {
 			$.get('../reply/getReplyContent', {
 				id : replyId
 			}, function(data){
 				
-				console.log(data);
+				if (!isModifing) {
+					modifyForm(replyId, i, data);
 				
-				let replyContent = $('#' + i);
-				
-				replyContent.empty().html('');
-				
-				let addHtml = `
-					<form action="../reply/doModify" method="POST">
-						<input type="hidden" name="id" value="\${data.data1.id}" /> 
-						<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
-							<div class="mb-2"><span>${rq.loginedMember.nickname }</span></div>
-							<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨주세요.">\${data.data1.body}</textarea>
-							<div class="mt-1 flex justify-end">
-								<a class="btn btn-outline btn-neutral btn-sm mr-2" onclick="replyModify_cancle();">취소</a>
-								<button class="btn btn-outline btn-neutral btn-sm">수정</button>
-							</div>
-						</div>
-					</form>
-					`;
-				
-				replyContent.append(addHtml);
+				} else {
+					replyModify_cancle(isModifing);
+					modifyForm(replyId, i, data);
+				}
 				
 			}, 'json')
 			
 		}
+		
+		function replyModify_cancle(i) {
+			let replyContent = $('#' + i);
+			replyContent.next().remove();
+			replyContent.removeClass('hidden');
+			isModifing = null;
+		}
+		
 	</script>
 	
 	<section class="my-5 text-xl">
