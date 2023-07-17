@@ -25,16 +25,23 @@ public class UsrMemberController {
 		this.rq = rq;
 	}
 	
-	// 액션 메서드
+	@RequestMapping("/usr/member/join")
+	public String join() {
+		return "usr/member/join";
+	}
+	
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public String doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public String doJoin(String loginId, String loginPw, String loginPwCheck, String name, String nickname, String cellphoneNum, String email) {
 		
 		if(Util.empty(loginId)) {
 			return Util.jsHistoryBack("아이디를 입력해주세요");
 		}
 		if(Util.empty(loginPw)) {
 			return Util.jsHistoryBack("비밀번호를 입력해주세요");
+		}
+		if(Util.empty(loginPwCheck)) {
+			return Util.jsHistoryBack("비밀번호 확인을 입력해주세요");
 		}
 		if(Util.empty(name)) {
 			return Util.jsHistoryBack("이름을 입력해주세요");
@@ -51,7 +58,28 @@ public class UsrMemberController {
 		
 		ResultData<Member> doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		
+		if (doJoinRd.isFail()) {
+			return Util.jsHistoryBack(doJoinRd.getMsg());
+		}
+		
 		return Util.jsReplace(doJoinRd.getMsg(), "login");
+	}
+	
+	@RequestMapping("/usr/member/loginIdDupCheck")
+	@ResponseBody
+	public ResultData<String> loginIdDupCheck(String loginId) {
+		
+		if(Util.empty(loginId)) {
+			return ResultData.from("F-1", "아이디를 입력해주세요.");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if (member != null) {
+			return ResultData.from("F-2", "이미 사용중인 아이디 입니다", "loginId", loginId);
+		}
+		
+		return ResultData.from("S-1", "사용 가능한 아이디 입니다", "loginId", loginId);
 	}
 	
 	@RequestMapping("/usr/member/login")

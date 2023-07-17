@@ -13,6 +13,7 @@
 			<div>
 				안녕하세요
 			</div>
+			<img src="/resource/images/강아지.jpeg" alt="" />
 		</div>
 	</section>
 
