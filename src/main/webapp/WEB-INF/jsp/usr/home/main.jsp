@@ -13,7 +13,23 @@
 			<div>
 				안녕하세요
 			</div>
-			<img src="/resource/images/강아지.jpeg" alt="" />
+			<div>
+				<img src="/resource/images/강아지.jpeg" alt="" />
+			</div>
+			<div>
+				<span class="modal-exam">모달예시</span>
+			</div>
+			<div>
+				<span class="popUp-exam">팝업예시</span>
+			</div>
+			
+			<div class="layer-bg"></div>
+			<div class="layer">
+				<h1>MODAL</h1>
+				<span class="close-x-btn">&times;</span>
+				<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis culpa nobis reprehenderit quam veritatis tenetur ex possimus aliquam officia at iste odio impedit ipsum dicta eaque harum maxime voluptatibus hic.</div>
+				<button id="closeBtn" class="btn btn-accent btn-sm">CLOSE</button>
+			</div>
 		</div>
 	</section>
 

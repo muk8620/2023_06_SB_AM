@@ -8,20 +8,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.interceptor.NeedLoginInterceptor;
+import com.example.demo.interceptor.NeedLogoutInterceptor;
 
 @Configuration
 public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
 	private BeforeActionInterceptor beforeActionInterceptor;
 	private NeedLoginInterceptor needLoginInterceptor;
-	private NeedLoginInterceptor needLogOutInterceptor;
+	private NeedLogoutInterceptor needLogoutInterceptor;
 
 	@Autowired
 	public MyWebMvcConfigurer(BeforeActionInterceptor beforeActionInterceptor,
-			NeedLoginInterceptor needLoginInterceptor, NeedLoginInterceptor needLogOutInterceptor) {
+			NeedLoginInterceptor needLoginInterceptor, NeedLogoutInterceptor needLogoutInterceptor) {
 		this.beforeActionInterceptor = beforeActionInterceptor;
 		this.needLoginInterceptor = needLoginInterceptor;
-		this.needLogOutInterceptor = needLogOutInterceptor;
+		this.needLogoutInterceptor = needLogoutInterceptor;
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 		ir.addPathPatterns("/usr/reply/doDelete");
 		ir.addPathPatterns("/usr/reply/getReplyContent");
 
-		ir = registry.addInterceptor(needLogOutInterceptor);
+		ir = registry.addInterceptor(needLogoutInterceptor);
 		ir.addPathPatterns("/usr/member/doJoin");
 		ir.addPathPatterns("/usr/member/login");
 		ir.addPathPatterns("/usr/member/doLogin");

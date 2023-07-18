@@ -10,12 +10,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.example.demo.vo.Rq;
 
 @Component
-public class NeedLogOutInterceptor implements HandlerInterceptor {
+public class NeedLogoutInterceptor implements HandlerInterceptor {
 
 	private Rq rq;
 	
 	@Autowired
-	public NeedLogOutInterceptor(Rq rq) {
+	public NeedLogoutInterceptor(Rq rq) {
 		this.rq = rq;
 	}
 	
