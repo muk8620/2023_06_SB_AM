@@ -12,7 +12,7 @@ $('select[data-value]').each(function(index, item){
 $('.modal-exam').click(function(){
 //	$('.layer-bg').show();
 //	$('.layer').show();
-	
+
 	$('.layer-bg, .layer').css('display', 'block');
 })
 
