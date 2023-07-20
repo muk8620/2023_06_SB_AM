@@ -20,7 +20,7 @@
 <title>${pageTitle }</title>
 </head>
 <body>
-	<div class="h-20 flex container mx-auto text-4xl">
+	<div class="h-20 flex container mx-auto text-3xl">
 		<a class="px-3 flex items-center" href="/"><span>로고</span></a>
 		<div class="flex-grow"></div>
 		<ul class="flex menu menu-horizontal bg-base-200">
@@ -44,3 +44,4 @@
 			<h1>${pageTitle }</h1>
 		</div>
 	</section>
+	

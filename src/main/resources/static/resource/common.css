@@ -6,7 +6,7 @@
     font-style: normal;
 }
 
-html > body {
+html > body, html > body .ProseMirror, html > body .toastui-editor-contents {
     font-family: 'KCC-Ganpan';
 	text-underline-position: under;
 }
@@ -19,6 +19,16 @@ html > body {
 	border:1px solid black;
 	padding: 10px; 
 	text-align: center;
+}
+
+html > body .ProseMirror, html > body .toastui-editor-contents {
+	text-align: left;
+	font-size: 1.25rem;
+}
+
+html > body .toast-ui-viewer .toastui-editor-contents {
+	text-align: center;
+	font-size: 1rem;
 }
 
 .btn-text-link {
