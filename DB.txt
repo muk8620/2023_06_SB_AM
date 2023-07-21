@@ -87,7 +87,7 @@ INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'admin',
-loginPw = 'admin',
+loginPw = SHA2('admin', 256),
 authLevel = 3,
 `name` = 'admin',
 nickname = 'admin',
@@ -98,7 +98,7 @@ INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'test2',
-loginPw = 'test2',
+loginPw = SHA2('test2', 256),
 `name` = 'test2',
 nickname = 'test2',
 cellphoneNum = '01011112222',
@@ -108,7 +108,7 @@ INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'test3',
-loginPw = 'test3',
+loginPw = SHA2('test3', 256),
 `name` = 'test3',
 nickname = 'test3',
 cellphoneNum = '01033334444',
@@ -243,6 +243,7 @@ from article;
      WHERE a.boardId = 2
 */
 
+SELECT SHA2('', 256);
 
 WITH am AS (
     SELECT a.*
@@ -262,3 +263,5 @@ WITH am AS (
      AND am.id = rp.relId
      GROUP BY am.id
      ORDER BY am.id DESC
+
+TRUNCATE `member`;
