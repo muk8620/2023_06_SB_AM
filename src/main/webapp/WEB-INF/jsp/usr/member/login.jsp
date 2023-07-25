@@ -29,9 +29,13 @@
 						</table>
 				</div>
 			</form>
-			<div class="mt-2">
-				<button class="btn btn-active btn-neutral" onclick="history.back();">뒤로가기</button>
-			</div>			
+			<div class="mt-2 flex justify-between">
+				<button class="btn btn-accent btn-sm" onclick="history.back();">뒤로가기</button>
+				<div>
+					<a class="btn btn-accent btn-sm" href="findLoginId">아이디 찾기</a>
+					<a class="btn btn-accent btn-sm" href="findLoginPw">비밀번호 찾기</a>
+				</div>
+			</div>		
 		</div>
 	</section>
 	
