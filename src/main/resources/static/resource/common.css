@@ -1,14 +1,29 @@
- 
 @font-face {
-    font-family: 'KCC-Ganpan';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 html > body, html > body .ProseMirror, html > body .toastui-editor-contents {
-    font-family: 'KCC-Ganpan';
-	text-underline-position: under;
+	font-family: 'GmarketSansMedium', sans-serif;
+	text-underline-position:under;
+}
+
+html[data-theme="dark"] :is(.table-box-type-1 > table th, .table-box-type-1 > table td) {
+	border-color: white;
+}
+
+.theme-toggle .fa-solid {
+	display: none;
+}
+
+html[data-theme="dark"] .theme-toggle .fa-solid {
+	display: inline;
+}
+
+html[data-theme="dark"] .theme-toggle .fa-regular {
+	display: none;
 }
 
 .table-box-type-1 > table {
@@ -17,7 +32,7 @@ html > body, html > body .ProseMirror, html > body .toastui-editor-contents {
 
 .table-box-type-1 > table th, .table-box-type-1 > table td {
 	border:1px solid black;
-	padding: 10px; 
+	padding: 10px;
 	text-align: center;
 }
 
@@ -28,7 +43,6 @@ html > body .ProseMirror, html > body .toastui-editor-contents {
 
 html > body .toast-ui-viewer .toastui-editor-contents {
 	text-align: center;
-	font-size: 1rem;
 }
 
 .btn-text-link {
@@ -41,14 +55,10 @@ html > body .toast-ui-viewer .toastui-editor-contents {
 }
 
 .border-bottom-line {
-	border-bottom: 1px solid #afafaf;
+	border-bottom : 1px solid #d1c7c7;
 }
 
-.modal-exam {
-	font-size: 2rem;
-}
-
-.popUp-exam {
+.modal-exam, .popUp-exam {
 	font-size: 2rem;
 }
 
