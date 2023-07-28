@@ -242,7 +242,7 @@ from article;
      and a.id = rp.relId
      WHERE a.boardId = 2
 */
-
+/*
 SELECT SHA2('', 256);
 
 WITH am AS (
@@ -265,3 +265,4 @@ WITH am AS (
      ORDER BY am.id DESC
 
 TRUNCATE `member`;
+*/

@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'GmarketSansMedium';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-family: 'KCC-Ganpan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 html > body, html > body .ProseMirror, html > body .toastui-editor-contents {
-	font-family: 'GmarketSansMedium', sans-serif;
+	font-family: 'KCC-Ganpan';
 	text-underline-position:under;
 }
 
