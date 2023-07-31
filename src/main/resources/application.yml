@@ -1,6 +1,10 @@
 server:
   port: 8081
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
   mail:
     host: smtp.gmail.com
     port: 587
@@ -28,3 +32,5 @@ custom:
   siteMainUri: http://localhost:8081
   emailFrom: no-reply@localhost
   emailFromName: 2023_06_SB_AM
+file:
+  dir: C:\Users\wnrto\Desktop\코딩(임시)

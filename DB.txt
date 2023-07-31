@@ -59,6 +59,16 @@ CREATE TABLE reply (
     , `body` TEXT NOT NULL
 );
 
+# file 테이블 생성
+
+CREATE TABLE `file`(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+    originName VARCHAR(50) NOT NULL,
+    savedName VARCHAR(100) NOT NULL,
+    savedPath VARCHAR(100) NOT NULL
+);
+
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -208,6 +218,7 @@ SELECT * FROM `member`;
 SELECT * FROM board;    
 SELECT * FROM reactionPoint;
 SELECT * FROM reply;
+SELECT * FROM `file`;
 
 
 -- SELECT LAST_INSERT_ID();
