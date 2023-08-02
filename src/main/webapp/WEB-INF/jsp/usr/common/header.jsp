@@ -62,7 +62,14 @@
 				<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/member/login">LOGIN</a></li>
 			</c:if>
 			<c:if test="${rq.getLoginedMemberId() != 0}">
-				<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/member/myPage">MYPAGE</a></li>
+				<c:choose>
+					<c:when test="${rq.getLoginedMember().authLevel != 3 }">
+						<li class="hover:underline"><a class="h-full px-3 flex items-center" href="/usr/member/myPage"><span>MYPAGE</span></a></li>
+					</c:when>
+					<c:otherwise>
+						<li class="hover:underline"><a class="h-full px-3 flex items-center" href="/adm/member/list"><span>회원관리</span></a></li>
+					</c:otherwise>
+				</c:choose>
 				<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/member/doLogout">LOGOUT</a></li>
 			</c:if>
 			<li class="hover:underline"><a class="h-full px-3 flex items-center text-3xl" href="/usr/api/APITest">API</a></li>
